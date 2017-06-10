@@ -1,0 +1,176 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>用户管理</li>
+                <li>添加用户信息</li>
+            </ul>
+            <include file="Common:back" />
+        </div>
+        <div class="clearfix form-header">
+            <h3 class="pull-left">添加用户信息</h3>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('User/doEditUser')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">所属部门</td>
+                    <td class="text-left">
+                        <select name="DepartId" id="DepartId" class="w-percent-100">
+                            <option value="0">请选择</option>
+                            <foreach item="department" name="departments">
+                                <option value="{$department['departid']}"
+                                <if condition="$department[departid] eq $d['departid']">selected="selected"</if>
+                                >
+                                {:str_repeat('&nbsp;', (get_deep($department["dpath"])-2) * 4)}
+                                {$department['departname']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">所属角色</td>
+                    <td class="text-left">
+                        <php>
+                            if($this->user['roleid'] != 12){
+                            unset($roles[12]);
+                            //unset($roles[6]);
+                            unset($roles[7]);
+                            unset($roles[8]);
+                            }
+                        </php>
+                        <select name="RoleId" id="RoleId"  class="w-percent-100">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="roles">
+                                <option  value="{$key}">{$v['title']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr id="row-stores">
+                    <td class="td-title text-left">负责门店</td>
+                    <td class="text-left">
+                        <div class="stores">
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">用户账号</td>
+                    <td class="text-left">
+                        <input type="text" name="UserAccount" id="UserAccount" value="{$d['useraccount']}" class="w-percent-100" autocomplete="off">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">真实姓名</td>
+                    <td class="text-left">
+                        <input type="text" name="RealName" class="hide">
+                        <input type="text" name="RealName" id="RealName" value="{$d['realname']}" class="w-percent-100" autocomplete="off"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">登录密码</td>
+                    <td class="text-left">
+                        <input type="password" name="UserPwd" class="hide">
+                        <input type="password" name="UserPwd" id="UserPwd" class="w-percent-100" autocomplete="off"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">年龄</td>
+                    <td class="text-left"><input type="text" name="Age" id="Age" value="{$d['age']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">性别</td>
+                    <td class="text-left">
+                        <select name="Sex" id="Sex" class="w-percent-100">
+                            <option value="2" <if condition="$d['sex'] eq '2'">selected="selected"</if>>未知</option>
+                            <option value="0" <if condition="$d['sex'] eq '0'">selected="selected"</if>>女</option>
+                            <option value="1" <if condition="$d['sex'] eq '1'">selected="selected"</if>>男</option>
+
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">电话</td>
+                    <td class="text-left"><input type="text" name="Tel" id="Tel" value="{$d['tel']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">手机</td>
+                    <td class="text-left"><input type="text" name="Mobile" id="Mobile" value="{$d['mobile']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">邮箱</td>
+                    <td class="text-left"><input type="text" name="Email" id="Email" value="{$d['email']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">用户状态</td>
+                    <td class="text-left">
+                        <select name="isLock" class="w-percent-100">
+                            <option value="0" <if condition="$d['islock'] eq '0'">selected="selected"</if>>启用状态</option>
+                            <option value="1" <if condition="$d['islock'] eq '1'">selected="selected"</if>>禁用状态</option>
+                            <option value="2" <if condition="$d['islock'] eq '2'">selected="selected"</if>>离职状态</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="UserId" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-primary" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function(){
+        $("#DepartId").change(function(){
+            var department = $(this).val();
+            if(department == '0') return false;
+            var url = '{:U("Ajax/getStores")}';
+
+            $.get(url, {department:department}, function(result){
+                $(".stores").html(result);
+            });
+        });
+
+        // 改变角色
+        $("#RoleId").change(function(){
+            var Role = $(this).find("option:selected").attr('role');
+
+            var url = "{:U('Ajax/getDeparts')}";
+
+            $.get(url,{Role:Role},function(data){
+                if(data != 'no department'){
+                    var str = '';
+                    $.each(data,function(i,v){
+                        if(v!=''){
+                            str= str +  v;
+                        }
+
+                    });
+                    $("#DepartId").html(str);
+                }else{
+                    $("#DepartId").html('');
+                }
+            });
+        });
+    });
+</script>

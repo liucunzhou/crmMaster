@@ -1,0 +1,113 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>编辑部门信息</li>
+            </ul>
+            <include file="Common:back" />
+        </div>
+        <div class="clearfix form-header">
+            <h3 class="pull-left">编辑部门信息</h3>
+        </div>
+
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Department/doEditDepartment')}">
+            <table class="table table-hover">
+                <!--
+                <tr>
+                    <td class="td-title text-left">选择门店</td>
+                    <td class="text-left">
+                        <div class="label-checkboxs">
+                            <foreach item="v" name="store">
+                                <label class="label-checkbox">
+                                    <input type="checkbox" name="store_id[]" value="{$key}" <if condition="$d['storeid'] eq $v['storeid']">checked</if>>
+                                    {$brand[$v['brandid']]['brandname']}{$v['storename']}
+                                </label>
+                            </foreach>
+                        </div>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                -->
+                <tr>
+                    <td class="text-left td-title">上级部门</td>
+                    <td class="text-left">
+                        <select name="ParentId" id="ParentId" class="w-percent-100">
+                            <option value="0">请选择</option>
+                            <foreach item="department" name="parents">
+                                <option value="{$department['departid']}" <if condition="$department[departid] eq $data[parentid]">selected="selected"</if>>
+                                {:str_repeat('&nbsp;', (get_deep($department["dpath"])-2) * 10)}
+                                    {$department['departname']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="text-left td-title">部门名称</td>
+                    <td class="text-left">
+                        <input type="text" name="DepartName" id="DepartName" class="w-percent-100" value="{$data['departname']}" placeholder="必填,部门与负责人中间用英文“:”隔开">
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="text-left td-title">部门性质</td>
+                    <td class="text-left">
+                        <select name="Role" id="Role" class="w-percent-100">
+                            <option value="manager" <if condition="$data['role'] eq 'manager'">selected="selected"</if>>管理</option>
+                            <option value="promoter-manager" <if condition="$data['role'] eq 'promoter-manager'">selected="selected"</if>>邀约手管理</option>
+                            <option value="seller-manager" <if condition="$data['role'] eq 'seller-manager'">selected="selected"</if>>销售管理</option>
+                            <option value="promoter" <if condition="$data['role'] eq 'promoter'">selected="selected"</if>>邀约手</option>
+                            <option value="seller" <if condition="$data['role'] eq 'seller'">selected="selected"</if>>销售</option>
+                            <option value="data" <if condition="$data['role'] eq 'data'">selected="selected"</if>>数据</option>
+                        </select>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="text-left td-title">所属门店</td>
+                    <td class="text-left">
+                       <div id="sells">
+                            <foreach item="v" name="deStores">
+                                <label>{$brand[$v['brandid']]['brandname']}{$v['storename']}</label>
+                                &nbsp;&nbsp;&nbsp;
+                            </foreach>
+                       </div>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="text-left td-title">部门排序</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" class="w-percent-100" value="{$data['orderno']}" placeholder="值为整数,数值越大首页排的越靠前"/>
+                        <p class="input-tip"></p>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class="text-left td-title">角色</td>-->
+                    <!--<td class="text-left">-->
+                        <!--<select name="Role" >-->
+                            <!--<foreach item="v" name="roles">-->
+                                <!--<option <if condition="$v['role'] eq $data['role']">selected</if> value="{$v.role}" >{$v.title}</option>-->
+                            <!--</foreach>-->
+                        <!--</select>-->
+                    <!--</td>-->
+                    <!--<td class="text-left"></td>-->
+                <!--</tr>-->
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="DepartId" value="{$Think.get.id}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-primary" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

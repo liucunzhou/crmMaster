@@ -1,0 +1,52 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <form class="ajax-form" data-action="{:U('Hall/doEditHall')}">
+            <table class="table table-hover">
+                <tr>
+                    <td>婚宴厅名称</td>
+                    <td>
+                        <input type="text" name="HallName" id="HallName" value="{$d['name']}">
+                        <p class="input-tip"></p>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>所属门店</td>
+                    <td>
+                        <select name="StoreId" id="StoreId">
+                            <option>--选择门店--</option>
+                            <foreach item="v" name="values">
+                                <option value="{$v['storeid']}">
+                                    {$brands[$stores[$v['storeid']]['brandid']]['brandname']}
+                                    {$v['storename']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>最大桌数</td>
+                    <td>
+                        <input type="text" name="MaxTables" id="MaxTables" value="{$d['nation']}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>排序</td>
+                    <td>
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$d['sort']}"/>
+                        <p class="input-tip"></p>
+                    </td>
+                    <td>值为整数,数值越大首页排的越靠前</td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

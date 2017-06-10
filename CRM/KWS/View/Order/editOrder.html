@@ -1,0 +1,386 @@
+<style>
+    .ms-choice{height:34px!important;line-height:34px!important;}
+</style>
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <div class="space-10"></div>
+
+        <table class="table table-responsive table-striped table-bordered table-hover" >
+            <tr>
+                <td class="w-percent-10">姓名</td>
+                <td class="w-percent-10">手机号</td>
+                <td class="w-percent-10">微博</td>
+                <td class="w-percent-10">微信</td>
+                <td class="w-percent-10">QQ</td>
+                <td class="w-percent-10">订单类型</td>
+                <td class="w-percent-10">订单负责人</td>
+            </tr>
+            <tr>
+                <td>{$customer['custname']}</td>
+                <td>{$customer['mobile']}</td>
+                <td>{$customer['weiboname']}</td>
+                <td>{$customer['wechat']}</td>
+                <td>{$customer['qq']}</td>
+                <td>
+                    <span class="text">
+                        <switch name="d['customertype']">
+                            <case value="0">未选择</case>
+                            <case value="1">网单</case>
+                            <!--<case value="2">自然进店</case>-->
+                            <case value="3">邀约进店</case>
+                            <!--<case value="4">退款</case>-->
+                            <!--<case value="5">电话订单</case>-->
+                            <default />异常订单类型
+                        </switch>
+                    </span>
+                </td>
+                <td>{:D('User')->getUser($d['sellerid'], 'realname')}</td>
+            </tr>
+        </table>
+
+        <form class="form form-edit-order form-layer" data-action="{:U('Order/doEditOrder')}">
+            <!-- 订单支付信息 -->
+            <table class="table table-responsive table-striped table-bordered" id="table-order-pay">
+                <tr>
+                    <td class="td-title w-percent-10">交易门店</td>
+                    <td class="text-left w-percent-40">
+                        {$brands[$stores[$d['company']]['brandid']]['brandname']}{$stores[$d['company']]['storename']}
+                    </td>
+                    <td class="td-title w-percent-10">咨询门店</td>
+                    <td class="text-left w-percent-40">
+                        <span class="text">{$brands[$stores[$d['storeid']]['brandid']]['brandname']}{$stores[$d['storeid']]['storename']}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">支付类型</td>
+                    <td class="text-left w-percent-40">
+                        <select class="doubleselect" name="OrderType" id="OrderType">
+                            <option value="0">请选择</option>
+                            <option value="1">全款</option>
+                            <option value="2">保留金</option>
+                            <option value="3">尾款</option>
+                            <option value="4">定金</option>
+                            <option value="5">退款</option>
+                            <option value="6">非订单尾款</option>
+                        </select>
+                        <select  class="doubleselect" name="OrderPay" >
+                            <option value="0">请选择</option>
+                            <option value="1" <if condition="$d['orderpay'] eq 1">selected</if>>天猫</option>
+                            <option value="2" <if condition="$d['orderpay'] eq 2">selected</if>>支付宝</option>
+                            <option value="3" <if condition="$d['orderpay'] eq 3">selected</if>>银行卡</option>
+                            <option value="4" <if condition="$d['orderpay'] eq 4">selected</if>>现金</option>
+                            <option value="5" <if condition="$d['orderpay'] eq 5">selected</if>>大众点评闪惠</option>
+                            <option value="6" <if condition="$d['orderpay'] eq 6">selected</if>>pos机刷卡</option>
+                            <option value="7" <if condition="$d['orderpay'] eq 7">selected</if>>团购</option>
+                        </select>
+                    </td>
+                    <td class="td-title w-percent-10">支付账号</td>
+                    <td class="text-left w-percent-40"><input type="text" name="OrderAccount" value="{$d['orderaccount']}"></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">套系金额</td>
+                    <td class="text-left w-percent-40"><input type="text" name="Money" id="Money" value="{$d['money']}"></td>
+                    <td class="td-title w-percent-10 color-red">付款金额</td>
+                    <td class="text-left w-percent-40"><input type="text" name="PayMoney" id="PayMoney"></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">补款时间</td>
+                    <td class="text-left w-percent-40">
+                        <input type="text" name="OrderTime" id="OrderTime" class="Wdate" placeholder="点击输入日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                    </td>
+                    <td class="td-title w-percent-10">备注</td>
+                    <td class="text-left w-percent-40">
+                        <textarea name="Remarks">{$d['remarks']}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">平台来源</td>
+                    <td class="text-left w-percent-40">
+                        <select name="Platform" id="Platform" class="w-percent-40" >
+                            <option value="0">请选择平台</option>
+                            <foreach item="v" name="platForm">
+                                <option value="{$v}" <if condition="$v eq $sources[$d['sourcefrom']]['platform']">selected</if>>{$v}</option>
+                            </foreach>
+                        </select>
+                        <select name="SourceFrom" id="SourceFrom" class="w-percent-50 selectpicker">
+                            <option value="0">请选择来源</option>
+                            <foreach item="v" name="sources">
+                                <option <if condition="$d['sourcefrom'] eq $v['sourceid']">selected</if> value="{$v['sourceid']}">{$v['sourcename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title w-percent-10"></td>
+                    <td class="text-left w-percent-40">
+
+                    </td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="hidden" name="OrderId" value="{$d['orderid']}" />
+                <input type="hidden" name="OrderNo" value="{$d['orderno']}"/>
+                <input type="hidden" name="CustId" id="custid" value="{$d['custid']}" />
+                <input type="hidden" name="DepartId" id="departid" value="{$d['departid']}" />
+                <input type="hidden" name="SellerId" id="sellerid" value="{$d['sellerid']}" />
+                <input type="hidden" name="PdepartId" id="pdepartid" value="{$d['pdepartid']}" />
+                <input type="hidden" name="PromoterId" id="promoterid" value="{$d['promoterid']}" />
+                <input type="hidden" name="StoreId" id="storeid" value="{$d['storeid']}" />
+                <input type="hidden" name="Kid" id="kid" value="{$d['kid']}" />
+            </div>
+        </form>
+    </div>
+    <div class="clearfix">
+        <h3 class="pull-left">支付记录</h3>
+        <div class="pull-right">
+            <div class="btn btn-system" id="btn-edit-order">保存</div>
+        </div>
+    </div>
+    <div class="space-10"></div>
+    <table class="table table-responsive table-striped table-bordered table-hover pose">
+        <tr>
+            <td>支付类型</td>
+            <td>支付金额</td>
+            <td class="w-percent-10">订单号</td>
+            <td class="w-percent-10">支付时间</td>
+            <td class="w-percent-15">客资来源</td>
+            <td>操作</td>
+        </tr>
+        <foreach name="log" item="val">
+            <tr>
+                <td>
+                    <switch name="val['ordertype']">
+                        <case value="1">全款</case>
+                        <case value="2">保留金</case>
+                        <case value="3">尾款</case>
+                        <case value="4">定金</case>
+                        <case value="5">退款</case>
+                        <case value="6">非订单尾款</case>
+                    </switch>
+                </td>
+                <td>{$val['paymoney']}</td>
+                <td>
+                    <input type="text" name="OrderNo" class="OrderNo" value="{$val['orderno']}" />
+                    <!--{$val['orderno']}-->
+                </td>
+                <td>
+                    {$val['ordertime']}
+                </td>
+                <td class="text-left">
+                    <select class="SourceFrom">
+                        <foreach item="source" name="sources1">
+                            <if condition="!is_numeric($key)">
+                                <optgroup label="{$key}">
+                                    <foreach item="v" name="source">
+                                        <option value="{$v['sourceid']}" <if condition="$v['sourceid'] eq $val['source']">selected</if>>{$v['sourcename']}</option>
+                                    </foreach>
+                                </optgroup>
+                            </if>
+                        </foreach>
+                    </select>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" data-action="{:U('Order/updateOrder',['OrderId'=>$val['orderid']])}" class="update_order">更新</a>&nbsp;
+                    <a href="javascript:void(0)" data-action="{:U('Order/delPayLog',['LogId'=>$val['logid']])}" class="action-delete">删除</a>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+
+</div>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-selectradio.js"></script>
+<script>
+    $(function () {
+        $(".update_order").click(function(){
+            var parents = $(this).parents("tr");
+            var SourceFrom = parents.find(".SourceFrom").val();
+            var OrderNo = parents.find(".OrderNo").val();
+            var url = $(this).attr("data-action");
+            $.get(url, {SourceFrom:SourceFrom,OrderNo:OrderNo},function(result){
+                if(result.code == '200') {
+                    window.location.reload();
+                } else {
+                    alert(result.msg);
+                }
+            })
+        });
+
+        $(".SourceFrom").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择来源',
+            single: true
+        });
+
+        $(".AInput").click(function(){
+            $(this).toggle();
+            var input = $(this).siblings("input,select");
+            if(input.attr("type") != undefined) {
+                input.attr("type", "text").focus();
+            } else {
+                input.toggleClass("hide").focus();
+            }
+        });
+
+        $(".AjaxInput").blur(function(){
+            var $this = $(this),
+                    sibling = $(this).siblings("a"),
+                    OriginValue = $(this).attr("data-value"),
+                    value = $(this).val();
+
+            var toggle = function(){
+                $this.attr("type","hidden");
+                sibling.toggle();
+            };
+
+            if(!confirm("确定更新?")){
+                toggle();
+                return false;
+            }
+
+            if(OriginValue == value) {
+                alert("信息未更新");
+                toggle();
+                return false;
+            }
+
+            var url = $(this).attr("data-action"),
+                    OrderId = $(this).attr("data-order"),
+                    field = $(this).attr("data-field");
+
+            var data = {};
+            data['OrderId'] = OrderId;
+            data[field] = value;
+            $.get(url, data, function(result){
+                if (result.code == '200') {
+                    alert("更新成功");
+                    $this.attr("data-value", $this.find("option:selected").text());
+                    $this.val(value);
+                    sibling.find(".text").html(value);
+                } else {
+                    alert("更新失败");
+                }
+            });
+            toggle();
+        });
+
+
+        $(".AjaxSelect").change(function(){
+            var $this = $(this),
+                    sibling = $(this).siblings("a"),
+                    OriginValue = $(this).attr("data-value"),
+                    value = $(this).val();
+
+            var toggle = function(){
+                $this.toggleClass("hide");
+                sibling.toggle();
+            };
+
+            if(!confirm("确定更新?")){
+                toggle();
+                return false;
+            }
+
+            if(OriginValue == value) {
+                alert("信息未更新");
+                toggle();
+                return false;
+            }
+
+            var url = $(this).attr("data-action"),
+                    OrderId = $(this).attr("data-order"),
+                    field = $(this).attr("data-field");
+
+            var data = {};
+            data['OrderId'] = OrderId;
+            data[field] = value;
+            $.get(url, data, function(result){
+                if (result.code == '200') {
+                    alert("更新成功");
+                    $this.attr("data-value", value);
+                    $this.val(value);
+                    sibling.find(".text").html($this.find("option:selected").text());
+                } else {
+                    alert("更新失败");
+                }
+            });
+            toggle();
+        });
+
+
+        $("#OrderType").change(function(){
+            $("#PayMoney").val('');
+            $("#OrderTime").val('');
+        });
+        $("#SourceFrom").multipleSelect({
+            filter: true,
+            width: '80%',
+            placeholder: '请选择来源',
+            single: true
+        });
+
+        //提交表单
+        $("#btn-edit-order").click(function () {
+            var $this = $(".form-edit-order"),
+                    url = $this.attr('data-action'),
+                    custid = $('#custid').val(),
+                    Money = $('#Money').val(),
+                    PayMoney = $('#PayMoney').val(),
+                    OrderTime = $('#OrderTime').val(),
+                    CustomerType = $("#CustomerType").val(),
+                    OrderType = $("#OrderType").val(),
+                    HasPay = $("#HasPay").val();
+            Platform = $("#Platform").val();
+            SourceFrom = $("#SourceFrom").val();
+
+            if (OrderType == '0') {
+                layer.msg('支付类型');
+                return false;
+            }
+
+            if (!Money) {
+                layer.msg('套系金额不能为空');
+                return false;
+            }
+            if (Platform=='0') {
+                layer.msg('平台不能为空');
+                return false;
+            }
+            if (SourceFrom=='0'||SourceFrom==null) {
+                layer.msg('来源不能为空');
+                return false;
+            }
+
+            if (!PayMoney) {
+                layer.msg('付款金额不能为空');
+                return false;
+            }
+
+            if (OrderType == '1' && Money != PayMoney) {
+                layer.msg('支付金额需要与套系金额一致');
+                return false;
+            }
+
+            if (!OrderTime || OrderTime == '0000-00-00 00:00:00') {
+                layer.msg('订单时间不能为空');
+                return false;
+            }
+
+            $.post(url, $this.serialize(), function (data) {
+                if (data.redirect != undefined) {
+                    window.location.href = data.redirect;
+                } else if (data.layer == 'yes') {
+                    parent.window.location.reload();
+                } else if (data.reload == 'yes') {
+                    window.location.reload();
+                } else {
+                    alert(data.msg);
+                    $('.change-verify').trigger("click");
+                    $this.find('input[name="' + data.id + '"]').siblings(".error-tip").html(data.msg).show();
+                }
+
+            }, 'json');
+        });
+    });
+</script>

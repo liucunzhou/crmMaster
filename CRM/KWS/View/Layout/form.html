@@ -1,0 +1,22 @@
+<div class="page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        %%breadcrumb%%
+        <div class="space-10"></div>
+        <h2>%%pageTitle%%</h2>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Menu/addMenu')}">
+            <table class="table table-hover">
+                %%inputs%%
+                <tr>
+                    <td></td>
+                    <td>
+                        %%hidden%%
+                        <input type="submit" value="%%submit%%" class="btn btn-system">
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

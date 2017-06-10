@@ -1,0 +1,119 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>用户管理</li>
+                <li>编辑个人信息</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix form-header">
+            <h4 class="pull-left">编辑个人信息</h4>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('User/doEditUserInfo')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">负责门店</td>
+                    <td class="text-left">
+                        <div class="stores">
+                            <foreach item="v" name="storeArr">
+                                <label>
+                                    {$brands[$stores[$v]['brandid']]['brandname']}{$stores[$v]['storename']}&nbsp;&nbsp;&nbsp;
+                                </label>
+                            </foreach>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">所属部门</td>
+                    <td class="text-left">
+                        <foreach item="v" name="dpath">
+                            <if condition="$key egt 2">
+                                {:D('Department')->getDepartment($v, 'departname')}&nbsp;&nbsp;&nbsp;
+                            </if>
+                        </foreach>
+                        {:D('Department')->getDepartment($d['departid'], 'departname')}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">用户账号</td>
+                    <td class="text-left">
+                       {$d['useraccount']}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">真实姓名</td>
+                    <td class="text-left">{$d['realname']}<!--<input type="text" name="RealName" id="RealName" value="{$d['realname']}" class="w-percent-100"/>--></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title text-left">年龄</td>
+                    <td class="text-left"><input type="text" name="Age" id="Age" value="{$d['age']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">性别</td>
+                    <td class="text-left">
+                        <select name="Sex" id="Sex" class="w-percent-100">
+                            <option value="0" <if condition="$d['sex'] eq '0'">selected="selected"</if>>女</option>
+                            <option value="1" <if condition="$d['sex'] eq '1'">selected="selected"</if>>男</option>
+                            <option value="2" <if condition="$d['sex'] eq '2'">selected="selected"</if>>未知</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">电话</td>
+                    <td class="text-left"><input type="text" name="Tel" id="Tel" value="{$d['tel']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">手机</td>
+                    <td class="text-left"><input type="text" name="Mobile" id="Mobile" value="{$d['mobile']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">邮箱</td>
+                    <td class="text-left"><input type="text" name="Email" id="Email" value="{$d['email']}" class="w-percent-100"/></td>
+                    <td></td>
+                </tr>
+
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <!--<input type="hidden" name="UserId" value="{$d['userid']}" />-->
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-primary" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+$(function(){
+    $("#DepartId").change(function(){
+        var department = $(this).val();
+        if(department == '0') return false;
+        var url = '{:U("Ajax/getStores")}';
+        $.get(url, {department:department}, function(result){
+            $(".stores").html(result);
+        });
+    });
+});
+</script>

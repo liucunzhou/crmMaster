@@ -1,0 +1,117 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'Department/addDepartment')}">
+                    <a href="{:U('Department/addDepartment')}" title="添加部门">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="text">添加部门</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('Department/expDepartment')}" title="导出部门">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出部门</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!--
+        <form class="form-inline form-advance-search">
+            <table class="w-percent-100">
+                <tr>
+                    <td class="w-percent-8">
+                        <input type="text" class="form-control" placeholder="部门编号"/>
+                    </td>
+                    <td class="w-percent-57">
+                        <input type="text" class="form-control" placeholder="部门名称"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select class="form-control">
+                            <option>--上级部门--</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <select class="form-control">
+                            <option>--部门性质--</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="text" class="form-control" placeholder="排序"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <div class="w-percent-100 clearfix">
+                            <a class="w-percent-45 pull-left btn btn-system">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        -->
+        <table class="table table-responsive table-bordered table-department">
+            <tr class="table-header">
+                <td class="w-percent-8">部门编号</td>
+                <td class="text-left w-percent-57">部门名称</td>
+                <td class="text-left w-percent-10">上级部门</td>
+                <td class="text-left w-percent-10">部门性质</td>
+                <td class="w-percent-5">排序</td>
+                <td class="w-percent-10">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <php>
+                    $deep = get_deep($val['dpath']);
+                    $dpath = explode('-', $val['dpath']);
+                </php>
+                <tr <if condition="$deep eq '3'">class="k k-{$val['departid']}"<else />class="p p-{$dpath[2]|default=0}"</if> data-id="{$val['departid']}">
+                    <td>{$val['departid']}</td>
+                    <td class="text-left">
+                        <div class="deep deep-{$deep-1}">{$val['departname']}</div>
+                    </td>
+                    <td class="text-left">{:$Department->getDepartment($val['parentid'],'departname')}</td>
+                    <td>
+                        <switch name="val.role">
+                            <case value="manager">管理</case>
+                            <case value="promoter-manager">邀约手管理</case>
+                            <case value="seller-manager">销售管理</case>
+                            <case value="seller">销售</case>
+                            <case value="promoter">邀约手</case>
+                            <case value="data">数据</case>
+                            <case value="finance">财务</case>
+                        </switch>
+                    </td>
+                    <td>{$val['orderno']}</td>
+                    <td class="operates">
+                        <a class="{:check_rule($RulesBlack, 'Department/editDepartment')}" href="{:U('Department/editDepartment',['id'=>$val['departid']])}">编辑</a>
+                        <!--<a href="javascript:void(0)" class=" action-delete {:check_rule($RulesBlack, 'Department/delDepartment')}" data-action="{:U('Department/delDepartment',['id'=>$val['departid']])}" data-tip="确定要删除{$val['departname']}么？">删除</a>-->
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+<script>
+    $(function(){
+        $(".k .deep").click(function(){
+            var k = $(this).parents(".k"),
+                k_id = k.attr("data-id");
+
+            $(".p-" + k_id).toggle();
+        });
+    });
+</script>

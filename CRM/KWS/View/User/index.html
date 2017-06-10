@@ -1,0 +1,178 @@
+<div class="page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>用户管理</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'User/addUser')}">
+                    <a href="{:U('User/addUser')}" title="添加客资">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="text">添加用户 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('User/expUser')}" title="导出用户">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出用户</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="w-percent-100">
+                <tr>
+                    <td class="w-percent-5">
+                        <input type="text" name="UserId" id="UserId" value="{$Think.get.UserId}" class="form-control" placeholder="编号"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="DepartId" id="DepartId" class="form-control">
+                            <option value="-1">--所在部门--</option>
+                            <foreach item="department" name="departments">
+                                <option value="{$department['departid']}" <if condition="$department[departid] eq $_GET['DepartId']">selected="selected"</if>>
+                                {:str_repeat('&nbsp;', (get_deep($department["dpath"])-2) * 5)}
+                                {$department['departname']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-8">
+                        <select name="RoleId" id="RoleId"  class="w-percent-100">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="roles">
+                                <option <if condition="$v['id'] eq $_GET['RoleId']">selected</if> value="{$key}">{$v['title']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-15">
+                        <input type="text" name="UserAccount" id="UserAccount" value="{$Think.get.UserAccount}" class="form-control" placeholder="用户账号"/>
+                    </td>
+                    <td class="w-percent-12">
+                        <input type="text" name="RealName" id="RealName" value="{$Think.get.RealName}" class="form-control" placeholder="真实姓名"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <select name="Sex" class="form-control">
+                            <option value="-1">性别</option>
+                            <option value="0" <eq name="_GET['Sex']" value="0">selected="selected"</eq>>女</option>
+                            <option value="1" <eq name="_GET['Sex']" value="1">selected="selected"</eq>>男</option>
+                            <option value="2" <eq name="_GET['Sex']" value="2">selected="selected"</eq>>未知</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="Mobile" id="Mobile" value="{$Think.get.Mobile}" class="form-control" placeholder="联系电话"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="Online" class="form-control">
+                            <option value="-1">在线状态</option>
+                            <option value="1" <eq name="_GET['Online']" value="0">selected="selected"</eq>>在线</option>
+                            <option value="2" <eq name="_GET['Online']" value="1">selected="selected"</eq>>离线</option>
+                            <option value="0" <eq name="_GET['Online']" value="2">selected="selected"</eq>>退出</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="isLock" id="isLock" class="form-control">
+                            <option value="-1" <eq name="_GET['isLock']" value="-1">selected="selected"</eq>>--是否锁定--</option>
+                            <option value="0" <eq name="_GET['isLock']" value="0">selected="selected"</eq>>有效</option>
+                            <option value="1" <eq name="_GET['isLock']" value="1">selected="selected"</eq>>锁定</option>
+                            <option value="2" <eq name="_GET['isLock']" value="2">selected="selected"</eq>>离职</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-15">
+                        <div class="w-percent-100 clearfix">
+                            <a href="javascript:void(0)" class="w-percent-100 pull-left btn btn-system btn-search">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="text-center w-percent-5">编号</td>
+                <td class="text-left w-percent-10">所在部门</td>
+                <td class="text-center w-percent-8">角色</td>
+                <td class="text-left w-percent-15">账号</td>
+                <td class="text-left w-percent-12">真实姓名</td>
+                <td class="text-center w-percent-5">性别</td>
+                <td class="text-center w-percent-10">最大接单数</td>
+                <td class="text-left w-percent-10">今日接单数</td>
+                <td class="text-center w-percent-10">有效</td>
+                <td class="text-center w-percent-15">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td class="text-center">{$val['userid']}</td>
+                    <td class="text-left">{:D('department')->getDepartment($val['departid'],'departname')}</td>
+                    <td class="text-center">{$roles[$val['roleid']]['title']}</td>
+                    <td class="text-left">
+                        <div class="pull-left">
+                            {$val['useraccount']}
+                        </div>
+                        <div class="pull-right">
+                            <if condition="S('UserOnline-'.$val['userid']) eq 1">
+                                <span class="color-red glyphicon glyphicon-ok-sign"></span>
+                            <elseif condition="S('UserOnline-'.$val['userid']) eq 2" />
+                                <span class="glyphicon glyphicon-minus-sign"></span>
+                            <else />
+                                <span class="glyphicon glyphicon-remove-sign"></span>
+                            </if>
+                        </div>
+                    </td>
+                    <td class="text-left">{$val['realname']}</td>
+                    <td class="text-center">
+                        <if condition="$val['sex'] eq '0'">
+                            女
+                        <elseif condition="$val['sex'] eq '1'"/>
+                            男
+                        <elseif condition="$val['sex'] eq '2'"/>
+                            未知
+                        </if>
+                    </td>
+                    <td class="text-center">{$val['maxorder']}</td>
+                    <td class="text-left">
+                        {:S("Count-".$val['userid'])}
+                    </td>
+                    <td class="text-center">{$val['islock']?'锁定':'有效'}</td>
+                    <td class="operates">
+                        <a href="javascript:void(0);" class="reset-max-order {:check_rule($RulesBlack, 'User/resetMaxOrder')}" data-action="{:U('User/resetMaxOrder',['id'=>$val['userid']])}">[重置接单数]</a>
+                        <a class="{:check_rule($RulesBlack, 'User/editUser')}" href="{:U('User/editUser',['id'=>$val['userid']])}">[编辑]</a>
+                        <a href="javascript:void(0)" class="action-delete {:check_rule($RulesBlack, 'User/delUser')}" data-action="{:U('User/delUser',['id'=>$val['userid']])}" data-tip="确认要删除{$val['realname']}么">[删除]</a>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+        <div class="hide">{$log}</div>
+    </div>
+</div>
+<script>
+$(function(){
+    $(".reset-max-order").click(function(){
+        var url = $(this).attr("data-action");
+        $.get(url,function(result){
+            if(result.code=='200') {
+                alert("重置成功");
+                window.location.reload();
+            } else {
+                layer.msg("重置失败");
+            }
+        });
+    });
+})
+</script>

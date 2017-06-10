@@ -1,0 +1,61 @@
+<script type="text/javascript" src="/assets/js/jqmeter.min.js"></script>
+<div id="daochu">点击下载</div>
+<div class="export hidden">
+    <div id="jqmeter-container"></div>
+    <div>数据总条数:<span class="count">{$count}</span></div>
+    <div>已导出条数:<span class="num">{$endNum}</span></div>
+    <a class="download hidden" href="">下载</a>
+</div>
+
+<script>
+    $(function(){
+        $('#daochu').click(function(){
+            $('.export').removeClass('hidden');
+             layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['240px', '240px'], //宽高
+                        content: $('.export')
+                    });
+            var endId = 1;
+
+            var listNum =1000;
+            var num = 0;
+            ajaxExport(endId,listNum,num);
+        })
+    })
+    function ajaxExport(endId,listNum,num){
+        $.ajax({
+            type:'POST',
+            url:'{:U("Exp/ajaxExp")}',
+            data:{endId:endId,listNum:listNum,num:num},
+            success:function(msg){
+                var goalnum = (msg['num']/msg['count'])*2000?(msg['num']/msg['count'])*2000:2000;
+
+                if(msg["expUrl"]){
+                    $('.download').attr('href',msg["expUrl"]);
+                    $('.download').removeClass('hidden');
+                }
+                $('#jqmeter-container').jQMeter({
+                    goal:'$2,000',
+                    raised:'$'+goalnum,
+                    width:'200px',
+                    height:'30px'
+                });
+
+                if(msg['num']){
+                    $('.num').html(msg['num']);
+                    $('.count').html(msg['count']);
+
+                   setTimeout( ajaxExport(msg['endId'],msg['listNum',msg['num']]),50000);
+                }else{
+                    return false;
+                }
+            }
+        });
+    }
+    $(function(){
+
+
+    });
+</script>

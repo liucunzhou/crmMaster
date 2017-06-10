@@ -1,0 +1,64 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>数据统计</li>
+                <li>财务统计</li>
+                <li>周报统计</li>
+            </ul>
+            <include file="Common:back"/>
+        </div>
+        <div class="toolbox clearfix">
+            <input id="export" type="button" value="导出" class="btn btn-primary"/>
+        </div>
+        <div class="space-10"></div>
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td>编号</td>
+                <td>客户姓名</td>
+                <td>咨询门店</td>
+                <td>手机号</td>
+                <td>微信号</td>
+                <td>微博昵称</td>
+                <td>QQ号</td>
+                <td>QQ验证</td>
+                <td>关键字</td>
+                <td>接受状态</td>
+                <td>回访状态</td>
+                <td>回访次数</td>
+                <td>订单</td>
+                <td>录入时间</td>
+                <td>最后回访时间</td>
+                <td>销售来源</td>
+                <td>邀约手</td>
+                <td>接单销售</td>
+            </tr>
+            <foreach item="val" name="count">
+                <tr <if condition="$val['isrepeat'] eq 1">class="color-red"</if>>
+                    <td>{$val['custno']}</td>
+                    <td>{$val['custname']}</td>
+                    <td>{$store[$val['storeid']]['storename']}</td>
+                    <td>{$val['mobile']}</td>
+                    <td>{$val['wechat']}</td>
+                    <td>{$val['weiboname']}</td>
+                    <td>{$val['qq']}</td>
+                    <td>{$val['qqcode']}</td>
+                    <td>{$val['keywords']}</td>
+                    <td>{:D('Assign')->getFieldInfo($val['custid'], 'status')}</td>
+                    <td>{$status[$val['status']]|default='未回访'}</td>
+                    <td>{$val.visitNum}</td>
+                    <td>{$val['isorder']?'是':'否'}</td>
+                    <td>{$val['inserttime']}</td>
+                    <td>{$val['lastvisittime']}</td>
+                    <td>{$source[$val['sourcefrom']]['sourcename']}</td>
+                    <td>{:D('User')->getUser($val['opeartor'], 'realname')}</td>
+                    <td>{:D('Assign')->getFieldInfo($val['custid'], 'nowuser')}</td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>

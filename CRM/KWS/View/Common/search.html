@@ -1,0 +1,29 @@
+<div class="page-search pull-left <empty name='Think.get.search'>hide</empty>">
+    <form class="form">
+        <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}">
+        <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}">
+        <foreach item="v" name="search">
+            <div class="form-group">
+                {:htmlspecialchars_decode($v)}
+            </div>
+        </foreach>
+        <input type="hidden" name="search" value="yes">
+        <div class="clearfix">
+            <button type="submit" class="btn btn-primary pull-left">高级搜索</button>
+            <button type="reset" class="btn btn-primary pull-right">重置</button>
+        </div>
+    </form>
+</div>
+<script>
+$(function(){
+    $(".search").click(function(){
+        if($(".page-search").hasClass("hide")){
+            $(".page-search").removeClass("hide");
+            $(".main-content").addClass("show_page_search");
+        } else {
+            $(".page-search").addClass("hide");
+            $(".main-content").removeClass("show_page_search");
+        }
+    });
+})
+</script>

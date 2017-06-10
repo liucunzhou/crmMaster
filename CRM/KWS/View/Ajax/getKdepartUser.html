@@ -1,0 +1,31 @@
+<div class="form_list">
+    <foreach item="v" name="departments">
+        <if condition="$v['role'] eq 'seller'">
+            <div class="panel panel-default w-percent-49 pull-left">
+                <div class="panel-heading clearfix">
+                    <label class="label-checkbox">
+                        <input type="checkbox" name="sellids[]" value="{$v['departid']}" <if condition="in_array($v['departid'], $selectedDepartments)">checked</if> >
+                        {$v['departname']}
+
+                    </label>
+                    <label class="label-checkbox pull-right align-right">
+                        <input class="checkall" type="checkbox">全选
+                    </label>
+                </div>
+                <php>
+                    $kid = array_keys($departments)[0];
+                    $users = D('User')->getUserOfDepartId($v['departid']);
+                </php>
+                <notempty name="users">
+                    <div class="panel-body">
+                        <foreach item="vl" name="users">
+                            <label class="label-checkbox">
+                                <input type="checkbox" name="seller[]" value="{$vl}" <if condition="in_array($vl, $selectedSales)">checked</if> >
+                                {:D('User')->getUser($vl,'realname')}</label>
+                        </foreach>
+                    </div>
+                </notempty>
+            </div>
+        </if>
+    </foreach>
+</div>

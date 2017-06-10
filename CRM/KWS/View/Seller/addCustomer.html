@@ -1,0 +1,196 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售回访</li>
+                <li>添加客户</li>
+
+            </ul>
+        </div>
+        <div class="clearfix form-header">
+            <h3 class="pull-left">{$_GET['id']?'编辑':'添加'}客户</h3>
+        </div>
+        <!-- 表单 -->
+        <form class="form form-add-customer-1" data-action="{:U('Seller/doAddCustomer')}">
+            <table class="table table-hover">
+                <!-- 客户基本信息 -->
+                <tbody>
+                <tr>
+                    <td class="text-left" colspan="5">
+                        客户基本资料
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title">客户编号</td>
+                    <td><input type="text" readonly id="CustNo" name="CustNo" value="{$custNo}"/></td>
+                    <td class="td-title">选择门店</td>
+                    <td>
+                        <select name="StoreId" id="StoreId" data-action="{:U('Ajax/business')}">
+                            <option value="0">--请选择--</option>
+                            <foreach item="v" name="kstores">
+                                <option value="{$v['storeid']}">{$brands[$v['brandid']]['brandname']}{$v['storename']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">客户姓名</td>
+                    <td>
+                        <input type="text" id="CustName" name="CustName"/>
+                    </td>
+                    <td class="td-title">称呼</td>
+                    <td>
+                        <select id="Sex" name="Sex">
+                            <option value="-1">未知</option>
+                            <option value="1">先生</option>
+                            <option value="0">女士</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-50"></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">客户手机</td>
+                    <td><input type="text" name="Mobile" id="Mobile"/></td>
+                    <td class="td-title">微信号</td>
+                    <td><input type="text" name="WeChat" id="WeChat"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">QQ号</td>
+                    <td><input type="text" name="QQ" id="QQ"/></td>
+                    <td class="td-title">QQ验证</td>
+                    <td><input type="text" name="QQCode" id="QQCode"/></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">微博昵称</td>
+                    <td><input type="text" name="WeiboName" id="WeiboName"/></td>
+                    <td class="td-title">分配销售</td>
+                    <td>
+                        <!--
+                        <select name="AppointType" id="AppointType">
+                            <option value="1">组长指定</option>
+                            <foreach name="list" item="vo" >
+                                <option value="3">晚值</option>
+                            </foreach>
+                        </select>
+                        -->
+                        <input type="hidden" name="AppointType" value="1">
+                        <select name="salseId" id="salseId">
+                            <option value="1">组长指定</option>
+                            <foreach item="v" name="ksellers">
+                                <option value="{$v['userid']}">{$v['realname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">来源渠道</td>
+                    <td>
+                        <select name="SourceFrom" id="SourceFrom">
+                            <option value="0">--请选择--</option>
+                            <foreach name="sources" item="s">
+                                <option value="{$s['sourceid']}">{$s['sourcename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title">来源关键字</td>
+                    <td>
+                        <input type="text" name="Keywords" id="Keywords" value=""/>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function(){
+        $("#StoreId").change(function(){
+            var url = "{:U('ajax/getSellers')}";
+            var StoreId = $("#StoreId").val();
+            $.get(url, {StoreId:StoreId}, function(result){
+                $(".stores").html(result);
+            });
+        });
+
+        $('.form-add-customer-1').submit(function(){
+            var $this = $(this);
+            var SourceFrom = $('#SourceFrom').val();
+            var StoreId = $('#StoreId').val();
+            if(SourceFrom=='0'){
+                layer.msg("来源不能为空1");
+                event.stopPropagation();
+                return false;
+            }
+            if(StoreId=='0'){
+                layer.msg("门店不能为空");
+                event.stopPropagation();
+                return false;
+            }
+            // 联系方式检测
+            var Mobile = $("#Mobile").val();
+            var WeChat = $("#WeChat").val();
+            var QQ = $("#QQ").val();
+            var WeiboName = $("#WeiboName").val();
+            if(Mobile != '' && !(/^1(3|4|5|7|8)\d{9}$/.test(Mobile))){
+                layer.msg("请输入正确的手机号");
+                return false;
+            }
+
+            if(Mobile == '' && WeChat == '' && QQ == '' && WeiboName == ''){
+                $("#Mobile").addClass("input-error");
+                $("#WeChat").addClass("input-error");
+                $("#QQ").addClass("input-error");
+                $("#WeiboName").addClass("input-error");
+                layer.msg("至少需要客户的一种联系方式");
+                event.stopPropagation();
+                return false;
+            }
+            var url = $this.attr('data-action');
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $this.serialize(),
+                beforeSend : function() {
+                    layer.load(1, {
+                        shade: [0.1,'#000'] // 0.1透明度的黑色背景
+                    });
+                },
+                complete : function() {
+                    layer.closeAll("loading");
+                },
+                success : function(data) {
+                    if (data.redirect != undefined) {
+
+                        window.location.href = data.redirect;
+
+                    } else {
+
+                        layer.alert(data.msg, {icon: 3, title:'录入结果'}, function(index){
+
+                            layer.close(index);
+                        });
+                    }
+                }
+            });
+            return false;
+        });
+    })
+</script>

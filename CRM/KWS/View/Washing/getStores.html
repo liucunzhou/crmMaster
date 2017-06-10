@@ -1,0 +1,6 @@
+    <option value="">全部门店</option>
+<foreach item="v" name="store">
+    <option value="{$v['storeid']}">
+        {$brands[$v['brandid']]['brandname']} {$v['storename']}
+    </option>
+</foreach>

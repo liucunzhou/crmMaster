@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统图片管理</title>
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/plugin.css">
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/plug-in/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="/assets/plug-in/webuploader/dist/webuploader.min.js"></script>
+    <script src="/assets/plug-in/layer/layer.js"></script>
+    <script>
+        $(function(){
+            WebUploader.create({
+                auto: true,
+                pick: '.btn-upload',
+                formData: {
+                    gid: '{$Think.get.gid}'
+                },
+                server: '{:U("Webkit/doUpload")}'
+            }).on('fileQueued', function( file ) {
+                var start =  +new Date();
+
+                // 返回的是 promise 对象
+                this.md5File(file, 0, 1 * 1024 * 1024)
+                // 可以用来监听进度
+                .progress(function(percentage) {
+                    // console.log('Percentage:', percentage);
+                })
+            }).on('uploadSuccess', function(file, response){
+
+                console.log(response);
+                if(response.code == '200'){
+                    layer.confirm('上传成功', function(index){
+                        window.location.href = window.location.href;
+                        layer.close(index);
+                    })
+                } else {
+                    layer.msg(data.result);
+                }
+
+            });
+
+            $(".create-group").click(function(){
+                var url = '{:U("Webkit/addGroup")}';
+                var groupName= $("#group_name").val();
+                $.get(url,{groupName:groupName}, function(data){
+                    if(data.code == '200') {
+                        layer.confirm(data.msg, function(index){
+                            window.location.href = window.location.href;
+                            layer.close(index);
+                        })
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                });
+            });
+
+            $(".glyphicon-trash").click(function(){
+                var url = $(this).attr("data-action");
+                $.get(url,function(data){
+                    if(data.code == '200') {
+                        layer.confirm(data.msg, function(index){
+                            window.location.href = window.location.href;
+                            layer.close(index);
+                        }, function(){
+                            window.location.href = window.location.href;
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <div class="images-plugin">
+
+        <div class="plugin-body">
+            <div class="head">
+                <div class="title">
+                    <span>所有图片</span>&nbsp;
+                    <span class="color-red">(点击选择图片)</span>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-primary btn-upload">上传</a>
+            </div>
+
+            <div class="images clearfix">
+                <foreach item="v" name="list">
+                    <ul class="image-item <if condition="$key%4 eq '0'">rn</if>">
+                       <li class="img"><img src="{$v['dpath']}" /></li>
+                       <li class="title">{$v['title']|default='未设置'}</li>
+                       <li class="func">
+                           <div class="func-item"><a class="glyphicon glyphicon-transfer"></a></div>
+                           <div class="func-item"><a class="glyphicon glyphicon-trash" data-action="{:U('Webkit/delImage',['id'=>$v['id']])}"></a></div>
+                       </li>
+                    </ul>
+                </foreach>
+            </div>
+
+            {$page}
+        </div>
+        <div class="groups">
+            <div class="dd <empty name="_GET[gid]">active</empty>"><a href="{:U('Webkit/images',['field'=>$_GET['field']])}">所有图片</a></div>
+            <foreach item="v" name="groups">
+                <div class="dd <if condition="$_GET['gid'] eq $v['id']">active</if>"><a href="{:U('Webkit/images',['gid'=>$v['id'],'field'=>$_GET['field']])}">{$v['group_name']}</a></div>
+            </foreach>
+            <div class="dd">
+                <div class="glyphicon glyphicon-plus"  data-toggle="modal" data-target=".add-group-form">添加分组</div>
+                <div class="modal fade add-group-form" tabindex="-1" role="dialog" aria-labelledby="add-group-form" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">创建分组</h4>
+                            </div>
+                            <div class="modal-body">
+                                <input type="text" name="group_name" id="group_name" placeholder="请输入分组名称" class="w-percent-100"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-sm create-group">确定</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

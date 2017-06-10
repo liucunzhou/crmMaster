@@ -1,0 +1,11 @@
+<foreach item="v" name="store">
+    <if condition="!is_numeric($key)">
+        <optgroup label="{$key}">
+            <foreach item="val" name="v">
+                <option value="{$val['storeid']}">
+                    {$brands[$val['brandid']]['brandname']} {$val['storename']}
+                </option>
+            </foreach>
+        </optgroup>
+    </if>
+</foreach>

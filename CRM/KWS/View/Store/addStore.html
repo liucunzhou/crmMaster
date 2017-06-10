@@ -1,0 +1,109 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>门店管理</li>
+                <li>添加门店信息</li>
+            </ul>
+            <include file="Public:goback" />
+        </div>
+
+        <div class="clearfix form-header">
+            <h3 class="pull-left ">添加门店信息</h3>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Store/doEditStore')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title">集团</td>
+                    <td class="text-left">
+                        <select name="GroupId" id="GroupId">
+                            <option value="0">--请选择集团--</option>
+                            <foreach item="v" name="companys">
+                                <option <if condition="$d['groupid'] eq $key">selected</if> value="{$key}">--{$v}--</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">选择品牌</td>
+                    <td class="text-left">
+                        <select id="BrandId" name="BrandId" >
+                            <option value="0">-请选择品牌---</option>
+                            <foreach item="v" name="brands">
+                                <option value="{$v['brandid']}">{$v['brandname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">所属大区</td>
+                    <td class="text-left">
+                        <select name="DepartId" id="DepartId">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="ks">
+                                <option <if condition="$d['departid'] eq $v['departid']" >selected</if> value="{$v['departid']}">{$v['departname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">销售部门</td>
+                    <td class="text-left">
+                        <div class="sells"></div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">门店名称</td>
+                    <td class="text-left"><input type="text" name="StoreName" id="StoreName" value="{$d['storename']}"></td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="td-title">门店业务</td>
+                    <td class="text-left">
+                        <select name="Business">
+                            <option value="0">--请选择门店业务--</option>
+                            <foreach item="v" name="business">
+                                <option value="{$key}" <if condition="$d['business'] eq $key">selected="selected"</if>>{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">门店排序</td>
+                    <td class="text-left"><input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}" placeholder="值为整数,数值越大首页排的越靠前"/></td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="StoreId" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $("#DepartId").change(function(){
+            var url = '{:U("Ajax/getDepartmentsOfKid")}',
+                    pid = $(this).val();
+            $.get(url, {pid:pid}, function(result){
+                $(".sells").addClass("active").html(result);
+            });
+        });
+    });
+</script>

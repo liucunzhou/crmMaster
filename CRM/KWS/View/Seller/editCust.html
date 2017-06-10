@@ -1,0 +1,151 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="form form-edit-cust" data-action="{:U('Seller/doEditCust')}">
+            <table class="table table-hover table-layer">
+                <!-- 客户基本信息 -->
+                <tbody>
+                    <tr>
+                        <td class="text-left" colspan="7">
+                            <h5>基本资料</h5>
+                        </td>
+                        <td class="text-right">
+                            <input type="hidden" name="layer" value="1" />
+                            <input type="hidden" name="CustId" value="{$d['custid']}" />
+                            <input type="hidden" name="Business" value="{$CurrentStore['business']}" />
+                            <input type="submit" value="保存" class="btn btn-primary btn-system">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td-title">客户姓名</td>
+                        <td><input type="text" id="CustName" name="CustName" value="{$d['custname']}"/></td>
+                        <td class="td-title">年龄</td>
+                        <td>
+                            <select name="Age" id="Age">
+                                <option>请选择</option>
+                                <for start="20" end="49">
+                                    <option <if condition="$d['age'] eq $i">selected</if> value="{$i}">{$i}</option>
+                                </for>
+                            </select>
+                        </td>
+                        <td class="td-title">称呼</td>
+                        <td>
+                            <select id="Sex" name="Sex">
+                                <option <if condition="$d['sex'] eq -1">selected</if> value="-1">未知</option>
+                                <option <if condition="$d['sex'] eq 1">selected</if> value="1">先生</option>
+                                <option <if condition="$d['sex'] eq 0">selected</if> value="0">女士</option>
+                            </select>
+                        </td>
+                        <td class="td-title">微信号</td>
+                        <td><input type="text" name="WeChat" id="WeChat" value="{$d['wechat']}" <notempty name="d['wechat']">readonly</notempty>/></td>
+
+                    </tr>
+                    <tr>
+                        <td class="td-title">手机号</td>
+                        <td><input type="text" name="Mobile" id="Mobile" value="{$d['mobile']}" <notempty name="d['mobile']">readonly</notempty>/></td>
+                        <td class="td-title">微博昵称</td>
+                        <td><input type="text" name="WeiboName" id="WeiboName" value="{$d['weiboname']}" <notempty name="d['weiboname']">readonly</notempty>></td>
+                        <td class="td-title">QQ号</td>
+                        <td><input type="text" name="QQ" id="QQ" value="{$d['qq']}" <notempty name="d['qq']">readonly</notempty>/></td>
+                        <td class="td-title">QQ验证</td>
+                        <td><input type="text" name="QQCode" id="QQCode" value="{$d['qqcode']}" <notempty name="d['qqcode']">readonly</notempty>></td>
+                    </tr>
+                    <tr>
+                        <td class="td-title">选择门店</td>
+                        <td>
+                            <input type="text"
+                                   value="{$brands[$CurrentStore['brandid']]['brandname']}{$CurrentStore['storename']}"
+                                   readonly/>
+                            <input type="hidden" name="StoreId" id="StoreId" value="{$d['storeid']}" />
+                        </td>
+                        <td class="td-title">是否订单</td>
+                        <td>
+                            <select name="IsOrder" id="IsOrder">
+                                <option value="-1">请选择</option>
+                                <option value="1" <if condition="$d['isorder'] eq '1'">selected</if>>是</option>
+                                <option value="0" <if condition="$d['isorder'] eq '0'">selected</if>>否</option>
+                            </select>
+                        </td>
+                        <td class="td-title">订单时间</td>
+                        <td><input type="text" name="OrderTime" id="OrderTime" value="{$d['ordertime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <switch name="CurrentStore['business']">
+                        <case value="photo"><include file="AjaxForm:photo"/></case>
+                        <case value="baby"><include file="AjaxForm:baby" /></case>
+                        <case value="wedding"><include file="AjaxForm:wedding" /></case>
+                        <case value="dress"><include file="AjaxForm:dress" /></case>
+                        <case value="birth"><include file="AjaxForm:SellBirth" /></case>
+                        <default /><include file="AjaxForm:photo" />
+                    </switch>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+$(function(){
+    //提交表单
+    $(".form-edit-cust").submit(function () {
+        var $this = $(this);
+        var url = $this.attr('data-action');
+        var IsOrder = $("#IsOrder").val(),
+            OrderTime = $("#OrderTime").val();
+        if(IsOrder == '1') {
+            if(OrderTime == '' || OrderTime == '0000-00-00 00:00:00' || OrderTime == '0000-00-00 00:00') {
+                layer.msg('请选择订单时间');
+                return false;
+            }
+        }
+
+        var PreTime = '{$d["presettime"]}';
+
+        // GotoStore
+        var GotoStore = $("#GotoStore").val(),
+            PresetTime = $("#PresetTime").val(),
+            IntoTime = $("#IntoTime").val();
+        if(GotoStore == '1' || GotoStore == '3') {
+            if(PresetTime == '' || PresetTime == '0000-00-00 00:00:00' || PresetTime == '0000-00-00 00:00') {
+                layer.msg('请选择预约时间');
+                return false;
+            }
+        }
+
+        if(GotoStore == '2') {
+            if(IntoTime == '' || IntoTime == '0000-00-00 00:00:00' || IntoTime == '0000-00-00 00:00') {
+                layer.msg('请选择入店时间');
+                return false;
+            }
+        }
+
+        if(GotoStore == '3') {
+            if(PresetTime == '' || PresetTime == '0000-00-00 00:00:00' || PresetTime == '0000-00-00 00:00') {
+                layer.msg('请选择预约时间');
+                return false;
+            }
+
+            if(PreTime == PresetTime) {
+                layer.msg('请修改预约时间');
+                return false;
+            }
+        }
+
+        $.post(url, $this.serialize(), function (data) {
+            if (data.redirect != undefined) {
+                window.location.href = data.redirect;
+            } else if(data.layer == 'yes') {
+                parent.window.location.reload();
+            } else if(data.reload == 'yes') {
+                window.location.reload();
+            } else {
+                alert(data.msg);
+                $('.change-verify').trigger("click");
+                $this.find('input[name="' + data.id + '"]').siblings(".error-tip").html(data.msg).show();
+            }
+
+        }, 'json');
+        return false;
+    });
+});
+</script>

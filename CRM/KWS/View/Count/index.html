@@ -1,0 +1,63 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>信息管理</li>
+                <li>所有文章</li>
+            </ul>
+            <include file="Common:back"/>
+        </div>
+        <div class="toolbox clearfix">
+            <a class="btn btn-primary" href="{:U('addArticle')}"><span class="glyphicon glyphicon-plus"></span>&nbsp;添加资讯</a>
+        </div>
+        <div class="space-10"></div>
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td align="center">编号</td>
+                <td align="center">标题</td>
+                <td align="center">发布时间</td>
+                <td align="center">状态</td>
+                <td align="center">是否推荐</td>
+                <td align="center">排序</td>
+                <td align="center"> 操作项</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td align="center">{$val['id']}</td>
+                    <td>{$val['title']}</td>
+                    <td align="center">{$val['post_time']}</td>
+                    <td align="center">{:$val['is_check']?'发布':'未审核'}</td>
+                    <td align="center">{:$val['is_recommend']?'是':'否'}</td>
+                    <td align="center">{$val['sort']}</td>
+                    <td align="center">
+                        <a href="{:U('Article/editArticle',array('id'=>$val['id']))}">[编辑]</a>&nbsp;
+                        <a link="{:U('Article/delArticle',array('id'=>$val['id']))}" href="javascript:void(0)" name="{$val.title}" class="del">[删除]</a>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".del").click(function(){
+		var delLink=$(this).attr("link");
+		$this = $(this);
+		if(confirm('你真的打算删除【'+$(this).attr("name")+'】吗?'))
+		{
+			$.get(delLink,function(data){
+				if(data.status==1){
+				   $this.parent('td').parent('tr').hide(300);
+				}else{
+				   alert(data.info);
+				}
+		  },"JSON");
+		}
+		return false;
+	});
+});
+</script>

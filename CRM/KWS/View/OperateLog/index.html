@@ -1,0 +1,148 @@
+<div class="page-main-content">
+    <include file="Common:search"/>
+    
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>操作日志</li>
+                <li>客户信息</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'OperatorLog/expLog')}">
+                    <a href="{:U('OperateLog/expLog', $_GET)}" id="expromer" target="_blank">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出日志</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 检索表单 -->
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="tabele table-bordered table-search">
+                <tr>
+                    <td class="w-percent-3"></td>
+                    <td class="w-percent-5">
+                        <select name="UserId[]" id="UserId" class="selectpicker" multiple="multiple">
+                            <foreach item="v" name="users">
+                                <option value="{$v['userid']}" <if condition="in_array($v['userid'], $_GET['UserId'])">selected</if>>{$v['realname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-12">
+                        <input type="text" name="contents" id="contents" value="" placeholder="操作内容"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <select name="TypeId" id="TypeId">
+                            <option value="-1">操作类型</option>
+                            <option value="0" <if condition="$_GET['TypeId'] eq '0'">selected</if> >登录</option>
+                            <option value="1" <if condition="$_GET['TypeId'] eq '1'">selected</if> >添加</option>
+                            <option value="2" <if condition="$_GET['TypeId'] eq '2'">selected</if>>删除</option>
+                            <option value="3" <if condition="$_GET['TypeId'] eq '3'">selected</if>>编辑</option>
+                            <option value="4" <if condition="$_GET['TypeId'] eq '4'">selected</if>>导出</option>
+
+                        </select>
+                    </td>
+                    <td class="w-percent-8">
+                        <input type="text" name="StartInsertTime" id="StartInsertTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.StartInsertTime">{$Think.get.StartInsertTime}</notempty>" placeholder="录入开始时间"/>
+                        <input type="text" name="EndInsertTime" id="EndInsertTime" class="Wdate border-top" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.EndInsertTime">{$Think.get.EndInsertTime}</notempty>" placeholder="录入结束时间"/>
+                    </td>
+
+                    <td class="w-percent-10">
+                        <input type="text" name="IP" id="IP" value="" placeholder="输入IP"/>
+                    </td>
+
+                    <td class="w-percent-8">
+                        <input type="submit" class="w-percent-100 btn btn-system" value="搜索"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="space-10"></div>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="w-percent-3">序号</td>
+                <td class=" w-percent-5">用户</td>
+                <td class="text-left w-percent-12">操作内容</td>
+                <td class=" w-percent-5">操作类型</td>
+                <td class="w-percent-8">操作时间</td>
+                <td class="w-percent-10">IP地址</td>
+
+                <td class="w-percent-8">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td>{$key+1}</td>
+                    <td class="">{:D('User')->getUser($val['userid'],'realname')}</td>
+                    <td class="text-left">
+                        {$val['operatelog']}
+                    </td>
+                    <td class="">
+                        <switch name="val['typeid']">
+                            <case value="0">登录</case>
+                            <case value="1">添加</case>
+                            <case value="2">删除</case>
+                            <case value="3">编辑</case>
+                            <case value="4">导出</case>
+                        </switch>
+                       </td>
+                    <td>{$val['inserttime']}</td>
+                    <td>{$val['ip']}</td>
+                    <td>
+
+
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+<div class="log hide">{$log}</div>
+<div class="export hidden">
+    <div id="jqmeter-container"></div>
+    <div>数据总条数:<span class="count-promoter">{$count}</span></div>
+    <div>已导出条数:<span class="num-promoter">{$endNum}</span></div>
+    <a class="download hidden" href="">点击下载</a>
+</div>
+<script type="text/javascript" src="/assets/js/jqmeter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/daterange/daterangepicker.css"/>
+<script src="/assets/plug-in/daterange/moment.js"></script>
+<script src="/assets/plug-in/daterange/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-select.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#InsertTime').daterangepicker({
+            "startDate": "{:date('Y/m/d')}",
+            "endDate": "{:date('Y/m/d')}",
+            "showDropdowns": true,
+            "locale": {
+                "format": 'YYYY/MM/DD'
+            },
+            "dateLimit": {
+                "months": 12
+            },
+            "linkedCalendars": false
+        });
+
+        $("#UserId").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择用户'
+        });
+    });
+</script>

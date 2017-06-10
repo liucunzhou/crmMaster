@@ -1,0 +1,38 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Source/doEditSource')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="text-left">来源名称</td>
+                    <td class="text-left"><input type="text" name="sourceName" id="sourceName" value="{$d['sourcename']}"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-left">来源类别</td>
+                    <td class="text-left">
+                        <select name="Platform" id="Platform">
+                            <foreach item="v" name="Platforms">
+                                <option value="{$v}"
+                                <if condition="$d['platform'] eq $v">selected</if>
+                                >{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-left">来源排序</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}"/>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="submit" value="保存" class="btn btn-system">
+            </div>
+        </form>
+    </div>
+</div>

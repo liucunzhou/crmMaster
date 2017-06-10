@@ -1,0 +1,17 @@
+<foreach item="val" name="list">
+    <tr>
+        <td>{$val['departid']}</td>
+        <td class="text-left">————{$val['departname']}</td>
+        <td class="text-left">{:$Department->getDepartment($val['parentid'],'departname')}</td>
+        <td>{:D('brand')->getBrand($val['brandid'])}</td>
+        <td>{$val['orderno']}</td>
+        <td class="operates">
+            <a href="{:U('Department/showDepartment',['id'=>$val['departid']])}">查看</a>
+            <a href="{:U('Department/editDepartment',['id'=>$val['departid']])}">编辑</a>
+            <a href="javascript:void(0)" class="ajax-action ajax-delete" ajax-href="{:U('Department/delDepartment',['id'=>$val['departid']])}">删除</a>
+        </td>
+    </tr>
+    <if condition="substr_count($val['childslist'], ',') gt 1">
+        {:R('Department/department', [$val['childslist']])}
+    </if>
+</foreach>

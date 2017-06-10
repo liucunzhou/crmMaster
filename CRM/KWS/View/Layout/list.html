@@ -1,0 +1,42 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="toolbox">
+            <a class="btn btn-info search">搜索</a>
+        </div>
+        <div class="space-10"></div>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <!--<td><input type="checkbox" id="checkAll" /></td>-->
+                <foreach item="v" name="fields">
+                    <td>
+                        <span class="pull-left">{$titles[$v]}</span>
+                        <if condition="in_array($v, $sort)">
+                            <a href="" class="glyphicon glyphicon-menu-down"></a>
+                            <!-- -->
+                            <!--<ul class="pull-left">-->
+                                <!--<li><a href="" class="glyphicon glyphicon-menu-up"></a></li>-->
+                                <!--<li><a href="" class="glyphicon glyphicon-menu-down"></a></li>-->
+                            <!--</ul>-->
+                        </if>
+                    </td>
+                </foreach>
+                <td>操作项</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <!--<td><input type="checkbox" id="checkAll" /></td>-->
+                    <foreach item="v" name="fields">
+                        <td><span class="pull-left">{$val[$v]}</span></td>
+                    </foreach>
+                    <td>
+                        <a href="{:U('member/editMember')}">编辑</a>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>

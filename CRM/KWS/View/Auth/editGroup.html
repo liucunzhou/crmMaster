@@ -1,0 +1,28 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Auth/doEditGroup')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">分组名称</td>
+                    <td class="text-left">
+                        <input type="text" name="title" id="name" value="{$d['title']}" placeholder="如:客服分组">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">分组状态</td>
+                    <td class="text-left">
+                        <input type="text" name="status" id="status" value="{$d['status']}" placeholder="分组排序" />
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>

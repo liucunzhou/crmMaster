@@ -1,0 +1,65 @@
+<tr>
+    <td colspan="8" class="text-left"><h5>宝宝信息</h5></td>
+</tr>
+<tr>
+    <td class="td-title">宝宝姓名</td>
+    <td class="text-left"><input type="text" name="BabyName" id="BabyName" value="{$d['babyname']}"/></td>
+    <td class="td-title">宝宝性别</td>
+    <td class="text-left">
+        <select name="BabySex" id="BabySex">
+            <option value="-1">--请选择--</option>
+            <option value="0" <if condition="$d['babysex'] eq '0'">selected="selected"</if>>女</option>
+            <option value="1" <if condition="$d['babysex'] eq '1'">selected="selected"</if>>男</option>
+            <option value="2" <if condition="$d['babysex'] eq '2'">selected="selected"</if>>未知</option>
+        </select>
+    </td>
+    <td class="td-title">宝宝年龄</td>
+    <td class="text-left"><input type="text" name="BabyAge" id="BabyAge" value="{$d['babyage']}"/></td>
+    <td class="td-title">单宝双宝</td>
+    <td class="text-left">
+        <select name="Twins" id="Twins">
+            <option value="0" <if condition="$d['twins'] eq '0'">selected="selected"</if>>--请选择--</option>
+            <option value="1" <if condition="$d['twins'] eq '1'">selected="selected"</if>>单宝</option>
+            <option value="2" <if condition="$d['twins'] eq '2'">selected="selected"</if>>双宝</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <td class="td-title">拍摄类型</td>
+    <td class="text-left">
+        <select name="PhotoType" id="PhotoType">
+            <option value="0" <if condition="$d['phototype'] eq '0'">selected="selected"</if>>--请选择--</option>
+            <option value="1" <if condition="$d['phototype'] eq '1'">selected="selected"</if>>宝宝单照</option>
+            <option value="2" <if condition="$d['phototype'] eq '2'">selected="selected"</if>>亲子婚纱照</option>
+            <option value="3" <if condition="$d['phototype'] eq '3'">selected="selected"</if>>亲子全家福</option>
+            <option value="4" <if condition="$d['phototype'] eq '4'">selected="selected"</if>>孕妇照</option>
+        </select>
+    </td>
+    <td class="td-title">是否进店</td>
+    <td class="text-left">
+        <select name="GotoStore" id="GotoStore">
+            <option value="0">请选择</option>
+            <option value="1" <if condition="$d['gotostore'] eq 1">selected</if> >已预约</option>
+            <option value="2" <if condition="$d['gotostore'] eq 2">selected</if> >已进店</option>
+            <option value="3" <if condition="$d['gotostore'] eq 3">selected</if> >已改期</option>
+        </select>
+    </td>
+    <td class="td-title">预约时间</td>
+    <td class="text-left">
+        <input type="text" name="PresetTime" id="PresetTime" value="{$d['presettime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"/>
+    </td>
+    <td class="td-title">进店时间</td>
+    <td class="text-left"><input type="text" name="IntoTime" id="IntoTime" value="{$d['intotime']}" class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"/></td>
+</tr>
+<tr>
+    <td class="td-title">预算金额:</td>
+    <td class="text-left">
+        <input type="text" name="Budget" id="Budget" value="{$d['budget']}" />
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>

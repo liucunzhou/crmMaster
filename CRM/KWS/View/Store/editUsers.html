@@ -1,0 +1,26 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <div class="space-10"></div>
+        <table class="table table-hover">
+              <tr>
+                  <td>用户名</td>
+                  <td>是否登录</td>
+                  <td>所在组</td>
+                  <td>操作</td>
+                  <td></td>
+              </tr>
+              <foreach item="v" name="userArr">
+                  <tr><php>$userOnline=S('UserOnline-'.$v);</php>
+                      <td class="td-title ">{:D('User')->getUser($v,'realname')}</td>
+                      <td><if condition="$userOnline eq 1">在线<elseif condition="$userOnline eq 2"/>离线<else/>退出</if></td>
+                      <php>$deparId = D('User')->getUser($v,'departid');</php>
+                      <td>{:D('Department')->getDepartment($deparId,'departname')}</td>
+                      <td class="">
+                          <a href="javascript:void(0)" class="action-delete {:check_rule($RulesBlack, 'Store/delUser')}" data-action="{:U('Store/delUser',['uid'=> $v,'storeId'=>$_GET['id']])}" data-tip="确定删除{:D('User')->getUser($v,'realname')}么？">删除</a>
+                      </td>
+                      <td></td>
+                  </tr>
+              </foreach>
+        </table>
+    </div>
+</div>

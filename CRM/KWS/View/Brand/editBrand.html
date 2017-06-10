@@ -1,0 +1,44 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Brand/doEditBrand')}" method="post">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">事业部</td>
+                    <td class="text-left">
+                        <select name="parent">
+                            <foreach item="v" name="Business">
+                                <php>$k = $key;</php>
+                                <optgroup label="{$k}">
+                                    <foreach item="vv" name="v">
+                                        <option value="{$k}:::{$vv}" <if condition="$k.$vv eq $d['department'].$d['business']">selected="selected"</if>>{$vv}</option>
+                                    </foreach>
+                                </optgroup>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">品牌名称</td>
+                    <td class="text-left">
+                        <input type="text" name="BrandName" id="BrandName" value="{$d['brandname']}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">排序</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}"/>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes" />
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+            </div>
+        </form>
+    </div>
+</div>

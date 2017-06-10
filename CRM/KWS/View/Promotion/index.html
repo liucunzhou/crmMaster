@@ -1,0 +1,198 @@
+<div class="page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>推广费用</li>
+                <li>所有费用</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'Promotion/editPromotion')}">
+                    <a href="javascript:void(0)" class="action-layer"
+                       data-action="{:U('Promotion/editPromotion',['id'=> $val['promotid']])}" layer-title="编辑推广"
+                       layer-width="500px" layer-height="460px" title="添加咨费">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="text">添加咨费</span>
+                    </a>
+                </li>
+                <!--
+                <li class="{:check_rule($RulesBlack, 'Promotion/impPromotion')}">
+                    <a href="javascript:void(0);" title="导入咨费" id="impPromotion" data-toggle="modal" data-target="#impPromotionModal">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导入咨费</span>
+                    </a>
+                </li>
+                -->
+                <li class="{:check_rule($RulesBlack, 'Promotion/expPromotion')}">
+                    <a href="{:U('Promotion/expPromotion', $_GET)}" title="导出咨费">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出咨费</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="w-percent-100 table-bordered table-search">
+                <tr>
+                    <td class="w-percent-10">
+                        <input type="text" id="PromotId" name="PromotId" value="{$_GET['PromotId']}" class="form-control" placeholder="编号"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="Operator[]" id="Operator"  class="selectpicker"  multiple="multiple">
+                            <option value="-1">推广</option>
+                            <foreach item="v" name="promoters">
+                                <option <if condition="in_array($v['userid'],$_GET['Operator'])">selected</if> value="{$v['userid']}">{$v['realname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+
+                    <td class="w-percent-10">
+                        <select name="SourceFrom">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="gsources">
+                                <option value="{$key}" <if condition="$key eq $_GET['SourceFrom']">selected</if>>{$key}</option>
+                                <foreach item="val" name="v" >
+                                    <option value="{$val['sourceid']}" <if condition="$val['sourceid'] eq $_GET['SourceFrom']">selected</if>>&nbsp;&nbsp;&nbsp;{$val['sourcename']}</option>
+                                </foreach>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="StoreId[]" id="StoreId" class="selectpicker"  multiple="multiple">
+                            <foreach item="v" name="kstores">
+                                <option value="{$v['storeid']}" <if condition="in_array( $v['storeid'],$_GET['StoreId'])">selected</if>>{$brands[$v['brandid']]['brandname']}{$v['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="" placeholder="咨费"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="" placeholder="指标"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="LightExposure" placeholder="曝光量"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="ClickNum" placeholder="点击/互动量"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="StartUtilityTime" placeholder="开始使用日期"  value='<notempty name="Think.get.StartUtilityTime">{$Think.get.StartUtilityTime}</notempty>' class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                        <input type="text" name="EndUtilityTime" placeholder="结束使用日期" value='<notempty name="Think.get.EndUtilityTime">{$Think.get.EndUtilityTime}</notempty>' class="Wdate border-top"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="submit" class="w-percent-100 btn btn-system" value="搜索"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="w-percent-10">序号</td>
+                <td class="w-percent-10">推广</td>
+                <td class="w-percent-10">推广平台</td>
+                <td class="w-percent-10">选择门店</td>
+                <td class="w-percent-10">咨费</td>
+                <td class="w-percent-10">咨询指标</td>
+                <td class="w-percent-10">曝光量</td>
+                <td class="w-percent-10">点击/互动量</td>
+                <td class="w-percent-10">使用日期</td>
+                <td class="w-percent-10">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td class="text-center">{$key+1}</td>
+                    <td class="text-center">{:D('User')->getUser($val['operator'],'realname')}</td>
+                    <td class="text-center">{$sources[$val['sourcefrom']]['sourcename']}</td>
+                    <td class="text-center">{$brands[$stores[$val['storeid']]['brandid']]['brandname']}{$stores[$val['storeid']]['storename']}</td>
+                    <td class="text-center">{$val['charge']}</td>
+                    <td class="text-center">{$val['customernum']}</td>
+                    <td class="text-center">{$val['lightexposure']}</td>
+                    <td class="text-center">{$val['clicknum']}</td>
+                    <td class="text-center">{$val['utilitytime']}</td>
+                    <td class="operates">
+                        <a href="javascript:void(0)"
+                           class="action-layer {:check_rule($RulesBlack, 'Promotion/editPromotion')}"
+                           data-action="{:U('Promotion/editPromotion',['id'=> $val['promotid']])}" layer-title="编辑推广"
+                           layer-width="500px" layer-height="460px">[编辑]</a>
+                        <a href="javascript:void(0)"
+                           class="action-delete {:check_rule($RulesBlack, 'Promotion/delPromotion')}"
+                           data-action="{:U('Promotion/delPromotion',['id'=> $val['promotid']])}" data-tip="确认删除该推广么">[删除]</a>
+                    </td>
+                </tr>
+            </foreach>
+            <tr><td>汇总</td><td></td><td></td><td></td><td>{$sum}</td><td></td><td></td><td></td><td></td><td></td></tr>
+        </table>
+        {$page}
+    </div>
+</div>
+<div class="log hide">{$log}</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="impPromotionModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">导入咨费</h4>
+            </div>
+            <div class="modal-body">
+                <input type="file" name="upexcel" id="upexcel">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="doUpexcel">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/ajaxfileupload.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-select.js"></script>
+<script>
+$(function(){
+    $("#doUpexcel").click(function(){
+        layer.msg('正在上传......',{time:3000000});
+        $.ajaxFileUpload ({
+            url: '{:U("Promotion/impPromotion")}',
+            secureuri: false,
+            fileElementId: 'upexcel',
+            dataType: 'json',
+            success: function (data, status)
+            {
+                if(data.code == 200){
+                    window.location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            },
+            error: function (data, status, e)//服务器响应失败处理函数
+            {
+                alert(data);
+            }
+        })
+    });
+
+    $("#Operator").multipleSelect({
+        filter: true,
+        width: '100%',
+        placeholder: '选择推广'
+    });
+    $("#StoreId").multipleSelect({
+        filter: true,
+        width: '100%',
+        placeholder: '选择门店'
+    });
+});
+</script>

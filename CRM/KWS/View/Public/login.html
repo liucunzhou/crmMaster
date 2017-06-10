@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="ZH-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+	<title>嘉豪集团CRM管理系统</title>
+	<link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/assets/admin/css/login.css">
+	<script src="/assets/js/jquery-1.7.2.min.js"></script>
+	<script src="/assets/js/jquery.form.js"></script>
+</head>
+<body>
+<div class="block main" id="block-login">
+	<div class="form-login">
+		<div class="login-header clearfix">
+			<h3>后台登陆</h3>
+		</div>
+		<div class="login-body">
+			<form role="form" class="form" method="post" action="{:U('Public/doLogin')}">
+				<div class="form-error"></div>
+				<div class="form-group">
+					<label for="UserAccount">用户名</label>
+					<input type="text" class="form-control" id="UserAccount" name="UserAccount" placeholder="请输入用户名">
+				</div>
+				<div class="form-group">
+					<label for="UserPwd">密码</label>
+					<input type="password" class="form-control" id="UserPwd" name="UserPwd" placeholder="请输入密码">
+				</div>
+				<button type="submit" class="btn btn-primary">登录</button>
+			</form>
+		</div>
+	</div>
+</div>
+<p class="copyright"><a rel="nofollow" target="_blank" href="http://www.miibeian.gov.cn/">ICP证：沪ICP备16005486号</a></p>
+<script>
+	$("input").focus(function(){
+		$(".form-error").empty().css({visibility:'hidden'});
+	});
+
+	$(".form").submit(function(){
+		var UserAccount = $("#UserAccount").val(),
+				UserPwd = $("#UserPwd").val(),
+				FormError = $(".form-error");
+		if(UserAccount == ''){
+			FormError.html('用户名不能为空').css({visibility:'visible'});
+			return false;
+		}
+
+		if(UserPwd == ''){
+			FormError.html('登录密码不能为空').css({visibility:'visible'});
+			return false;
+		} else if(UserPwd.length < 6) {
+			FormError.html('登录密码长度不能小于6').css({visibility:'visible'});
+			return false;
+		}
+
+		$(this).ajaxSubmit(function(data){
+			if(data.code != '200'){
+				FormError.html(data.msg).css({visibility:'visible'});
+			} else {
+				window.location.href = data.redirect;
+			}
+		});
+		return false;
+	});
+</script>
+</body>
+</html>

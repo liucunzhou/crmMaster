@@ -1,0 +1,143 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>门店管理</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'Source/editSource')}">
+                    <a href="{:U('Store/addStore')}" title="添加门店">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="text">添加门店</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('Store/expStore',$_GET)}" title="导出门店">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出门店</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <table class="w-percent-100">
+                <tr class="table-header">
+                    <td class="w-percent-5">
+                        <input type="text" name="StoreId" id="StoreId" value="{$_GET['StoreId']}" class="form-control" placeholder="编号"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="GroupId" id="GroupId" class="form-control">
+                            <option value="0">--集团--</option>
+                            <foreach item="v" name="companys">
+                                <option
+                                <if condition="$_GET['GroupId'] eq $key">selected</if>
+                                value="{$key}">--{$v}--</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-8">
+                        <select name="Business" id="Business" class="form-control">
+                            <option value="0">--门店业务--</option>
+                            <foreach item="v" name="business">
+                                <option value="{$key}"
+                                <if condition="$_GET['Business'] eq $key">selected="selected"</if>
+                                >{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-35">
+                        <select name="BrandId" id="BrandId" class="form-control w-percent-20 pull-left">
+                            <option value="0">--选择品牌--</option>
+                            <foreach item="v" name="brands">
+                                <option value="{$v['brandid']}" <if condition="$v['brandid'] eq $_GET['BrandId']">selected</if>>{$v['brandname']}</option>
+                            </foreach>
+                        </select>
+                        <input type="text" name="StoreName" id="StoreName" value="{$_GET['StoreName']}" class="form-control w-percent-78 pull-right" placeholder="门店名称"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="DepartId" id="DepartId" class="form-control">
+                            <option value="0">--选择大区--</option>
+                            <foreach item="v" name="ks">
+                                <option <if condition="$_GET['DepartId'] eq $v['departid']">selected</if> value="{$v['departid']}">{$v['departname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-15">
+                        <select class="form-control">
+                            <option value="0">--销售部门--</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="text" name="OrderNo" id="OrderNo" class="form-control" placeholder="排序"/>
+                    </td>
+                    <td class="w-percent-12">
+                        <div class="w-percent-100 clearfix">
+                            <a href="javascript:void(0)" class="w-percent-100 pull-left btn btn-system btn-search">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="text-center w-percent-5">编号</td>
+                <td class="text-left w-percent-10">集团</td>
+                <td class="text-left w-percent-8">门店业务</td>
+                <td class="text-left w-percent-35">门店名称</td>
+                <td class="text-left w-percent-10">所属大区</td>
+                <td class="text-left w-percent-15">销售部门</td>
+                <td class="text-center w-percent-5">排序</td>
+                <td class="text-center w-percent-12">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td class="text-center">{$val['storeid']}</td>
+                    <td class="text-left">{$companys[$val['groupid']]|default='未选择'}</td>
+                    <td class="text-left">{$business[$val['business']]}</td>
+                    <td class="text-left">{$brands[$val['brandid']]['brandname']}{$val['storename']}</td>
+                    <td class="text-left">{:D('Department')->getDepartment($val['departid'],'departname')}</td>
+                    <td class="text-left">
+                        <php>
+                            $sellids = explode(',',$val['sellids']);
+                        </php>
+                        <notempty name="sellids">
+                            <ul>
+                                <foreach item="v" name="sellids">
+                                    <li>{$departments[$v]['departname']}</li>
+                                </foreach>
+                            </ul>
+                        </notempty>
+                    </td>
+                    <td class="text-center">{$val['orderno']}</td>
+                    <td class="operates">
+                        <if condition="in_array($val['storeid'],$multiStoreIds)">
+                        <a href="javascript:void(0)" class="action-change {:check_rule($RulesBlack, 'Store/changeMultiDepartId')}"  data-action="{:U('Store/changeMultiDepartId',['StoreId'=> $val['storeid']])}">[调换部门]</a>
+                        </if>
+                        <a class="{:check_rule($RulesBlack, 'Store/editStore')}" href="{:U('Store/editStore',['id'=> $val['storeid']])}">[编辑]</a>
+                        <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Store/editUsers')}" data-action="{:U('Store/editUsers',['id'=> $val['storeid']])}" layer-title="{$brands[$val['brandid']]['brandname']}{$val['storename']}门店用户信息" layer-width="600px" layer-height="520px">[用户]</a>
+                        <a href="javascript:void(0)" class="action-delete {:check_rule($RulesBlack, 'Store/delStore')}" data-action="{:U('Store/delStore',['id'=> $val['storeid']])}" data-tip="确定删除{$val['storename']}么？">[删除]</a>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+

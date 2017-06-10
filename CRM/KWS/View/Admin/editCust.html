@@ -1,0 +1,177 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Admin/doEditCust')}">
+            <table class="table table-hover table-layer">
+                <!-- 客户基本信息 -->
+                <tbody>
+                <tr>
+                    <td class="text-left" colspan="7">
+                        <h5>基本资料</h5>
+                    </td>
+                    <td class="text-right">
+                        <input type="hidden" name="layer" value="1" />
+                        <input type="hidden" name="id" value="{$d['custid']}" />
+                        <input type="submit" value="保存" class="btn btn-primary btn-system">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title">客户姓名</td>
+                    <td><input type="text"  id="CustName" name="CustName" value="{$d['custname']}" /></td>
+                    <td class="td-title">年龄</td>
+                    <td>
+                        <select name="Age" id="Age">
+                            <option>请选择</option>
+                            <for start="20" end="49">
+                                <option <if condition="$d.age eq $i">selected</if> value="{$i}">{$i}</option>
+                            </for>
+                        </select>
+                    </td>
+                    <td class="td-title">称呼</td>
+                    <td>
+                        <select  id="Sex" name="Sex" >
+                            <option  <if condition="$d.sex eq -1">selected</if> value="-1">未知</option>
+                            <option   <if condition="$d.sex eq 1">selected</if> value="1">先生</option>
+                            <option   <if condition="$d.sex eq 0">selected</if> value="0">女士</option>
+                        </select>
+                    </td>
+                    <td class="td-title">微信号</td>
+                    <td><input type="text" name="WeChat"  id="WeChat" value="{$d['wechat']}" /></td>
+
+                </tr>
+                <tr>
+                    <td class="td-title">手机号</td>
+                    <td><input type="text" name="Mobile" id="Mobile" value="{$d['mobile']}" /></td>
+                    <td class="td-title">微博昵称</td>
+                    <td><input type="text" name="WeiboName"  id="WeiboName" value="{$d['weiboname']}" ></td>
+                    <td class="td-title">QQ号</td>
+                    <td><input type="text" name="QQ" id="QQ" value="{$d['qq']}"/></td>
+                    <td class="td-title">QQ验证</td>
+                    <td><input type="text" name="QQCode"  id="QQCode"  value="{$d['qqcode']}" ></td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="text-left"><h5>婚姻信息</h5></td>
+                </tr>
+                <tr>
+                    <td class="td-title">婚期状态</td>
+                    <td>
+                        <select name="WedStatus" id="WedStatus">
+                            <option  <if condition="$d.wedstatus eq 0">selected</if> value="0">已定</option>
+                            <option <if condition="$d.wedstatus eq 1">selected</if> value="1">未定</option>
+                            <option <if condition="$d.wedstatus eq 2">selected</if> value="2">考虑中</option>
+                            <option <if condition="$d.wedstatus eq 3">selected</if> value="3">不考虑</option>
+                        </select>
+                    </td>
+                    <td class="td-title">城市品牌</td>
+                    <td><input type="text" name="brand" id="brand" value="{$d['brand']}"/></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">选择门店</td>
+                    <td>
+                        <select name="StoreId" id="StoreId">
+                            <option >请选择</option>
+                            <foreach name="storeList" item="v" >
+                                <option  <if condition="$d['storeid'] eq $v['storeid']">selected</if> value="{$v.storeid}" >{$brand[$store[$v['storeid']]['brandid']]['brandname']}{$v['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title">是否进店</td>
+                    <td><input type="text" name="GotoStore" id="GotoStore" value="{$d['gotostore']}"/></td>
+                    <td class="td-title">预约时间</td>
+                    <td><input type="text" name="PresetTime" id="PresetTime" value="{$d['presettime']}" class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+                    <td class="td-title">进店时间</td>
+                    <td><input type="text" name="IntoTime" id="IntoTime" value="{$d['intotime']}" class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">新郎姓名</td>
+                    <td><input type="text" name="Groom" id="Groom" value="{$d['groom']}"/></td>
+                    <td class="td-title">新郎手机</td>
+                    <td><input type="text" name="GroomMobi" id="GroomMobi" value="{$d['groommobi']}"/></td>
+                    <td class="td-title">新娘姓名</td>
+                    <td><input type="text" name="Bride" id="Bride" value="{$d['bride']}"/></td>
+                    <td class="td-title">新娘手机</td>
+                    <td><input type="text" name="BrideMobi" id="BrideMobi" value="{$d['bridemobi']}"/></td>
+                </tr>
+                <tr>
+                    <td class="td-title">化妆团队</td>
+                    <td>
+                        <select name="MakeupTeam" id="MakeupTeam">
+                            <foreach name="makeupTeam" item="v">
+                                <option <if condition="$d.makeupteam eq $v.teamid" value="{$v.teamid}">selected</if>{$v.teamname}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title">摄影团队</td>
+                    <td>
+                        <select name="PhotoTeam" id="PhotoTeam">
+                            <foreach name="photoTeam" item="v">
+                                <option <if condition="$d.phototeam eq $v.teamid">selected</if> value="{$v.teamid}">{$v.teamname}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title">拍摄时间</td>
+                    <td><input type="text" name="PhotoTime" id="PhotoTime" value="{$d['phototime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <!-- 订单信息 -->
+                <tr>
+                    <td class="td-title">是否订单</td>
+                    <td><input type="text" name="IsOrder" id="IsOrder" value="{$d['isorder']}"/></td>
+                    <td class="td-title">订单时间</td>
+                    <td><input type="text" name="OrderTime" id="OrderTime" value="{$d['ordertime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">套系金额</td>
+                    <td><input type="text" name="OrderPrice" id="OrderPrice" value="{$d['orderprice']}"/></td>
+                    <td class="td-title">已付金额</td>
+                    <td><input type="text" name="PayPrice" id="PayPrice" value="{$d['payprice']}"/></td>
+                    <td class="td-title">补款金额</td>
+                    <td><input type="text" /></td>
+                    <td class="td-title">补款时间</td>
+                    <td><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss '})"/></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">婚宴状态</td>
+                    <td><input type="text" name="IsFeast" id="IsFeast" value="{$d['isfeast']}"/></td>
+                    <td class="td-title">婚宴时间</td>
+                    <td><input type="text" name="feasttime" id="feasttime" value="{$d['feasttime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+                    <td class="td-title">预算桌数</td>
+                    <td><input type="text" name="FeastTables" id="FeastTables" value="{$d['feasttables']}"/></td>
+                    <td class="td-title">预算</td>
+                    <td><input type="text" name="Budget" id="Budget" value="{$d['budget']}"/></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">通讯地址</td>
+                    <td><input type="text" name="Address" id="Address" value="{$d['address']}"/></td>
+                    <td class="td-title">公司地址</td>
+                    <td><input type="text" name="CompanyAddr" id="CompanyAddr" value="{$d['companyaddr']}"/></td>
+                    <td class="td-title">工作职位</td>
+                    <td><input type="text" name="Job" id="Job" value="{$d['job']}"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">备注</td>
+                    <td colspan="2">
+                      <textarea name="Remark" class="w-percent-100">{$d['remark']}</textarea>
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>

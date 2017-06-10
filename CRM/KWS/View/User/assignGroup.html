@@ -1,0 +1,36 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>用户管理</li>
+                <li>添加用户</li>
+            </ul>
+            <include file="Common:back" />
+        </div>
+        <div class="clearfix form-header">
+            <h3 class="pull-left">添加用户信息</h3>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('User/doEditUserGroup')}" method="post">
+
+            <foreach  item="val" name="d">
+                <label>
+                    <input type="radio" name="group_id[]" <if condition="$groupId eq $val['id']" >checked</if> value="{$val['id']}">
+                    {$val['title']}
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            </foreach>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-primary" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

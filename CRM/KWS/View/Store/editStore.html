@@ -1,0 +1,175 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>部门管理</li>
+                <li>门店管理</li>
+                <li>编辑门店信息</li>
+            </ul>
+            <include file="Public:goback" />
+        </div>
+
+        <div class="clearfix form-header">
+            <h3 class="pull-left ">编辑门店信息</h3>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Store/doEditStore')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title">集团</td>
+                    <td class="text-left">
+                        <select name="GroupId" id="GroupId">
+                            <option value="0">--请选择集团--</option>
+                            <foreach item="v" name="companys">
+                                <option <if condition="$d['groupid'] eq $key">selected</if> value="{$key}">--{$v}--</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="td-title">选择品牌</td>
+                    <td class="text-left">
+                        <select name="BrandId" id="BrandId">
+                            <option value="0">请选择</option>
+                            <foreach name="brands" item="v">
+                                <option <if condition="$d['brandid'] eq $v['brandid']" >selected</if> value="{$v['brandid']}">{$v['brandname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <tr>
+                    <td class="td-title">门店名称</td>
+                    <td class="text-left"><input type="text" name="StoreName" id="StoreName" value="{$d['storename']}"></td>
+                    <td class="text-left"></td>
+                </tr>
+
+                <tr>
+                    <td class="td-title">门店业务</td>
+                    <td class="text-left">
+                        <select name="Business">
+                            <option value="0">--请选择门店业务--</option>
+                            <foreach item="v" name="business">
+                                <option value="{$key}" <if condition="$d['business'] eq $key">selected="selected"</if>>{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title">所属大区</td>
+                    <td class="text-left">
+                        <select name="DepartId" id="DepartId">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="ks">
+                                <option <if condition="$d['departid'] eq $v['departid']" >selected</if> value="{$v['departid']}">{$v['departname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                <notempty name="sells">
+                    <tr class="sell-departments active">
+                        <td class="td-title text-left">销售部门</td>
+                        <td class="text-left kstores">
+                            <div class="form_list">
+                                <foreach item="v" name="kdepart">
+                                    <div class="panel panel-default w-percent-49 pull-left">
+                                        <div class="panel-heading clearfix">
+                                            <label class="label-checkbox">
+                                                <input type="checkbox" name="sellids[]" value="{$v['departid']}" <if condition="in_array($v['departid'], $sells)">checked</if> >
+                                                {$v['departname']}
+
+                                            </label>
+                                            <label class="label-checkbox pull-right align-right">
+                                                <input class="checkall" type="checkbox">全选
+                                            </label>
+                                        </div>
+                                        <php>
+                                            $dusers = D('User')->getUserOfDepartId($v['departid']);
+                                        </php>
+                                        <notempty name="dusers">
+                                            <div class="panel-body">
+                                                <foreach item="vl" name="dusers">
+                                                    <label class="label-checkbox">
+                                                        <input type="checkbox" name="seller[]" value="{$vl}" <if condition="in_array($vl, $users)">checked</if> >
+                                                        {:D('User')->getUser($vl,'realname')}
+                                                    </label>
+                                                </foreach>
+                                            </div>
+                                        </notempty>
+                                    </div>
+                                </foreach>
+                            </div>
+
+                        </td>
+                        <td></td>
+                    </tr>
+                    <else />
+                    <tr class="sell-departments">
+                        <td class="td-title">销售部门</td>
+                        <td class="text-left">
+                            <div class="sells">
+                                <foreach item="v" name="d.sellids">
+                                    {$v}
+                                </foreach>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </notempty>
+                <tr>
+                    <td class="td-title text-left">门店排序</td>
+                    <td class="text-left"><input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}"/></td>
+                    <td class="text-left w-percent-20">值为整数,数值越大首页排的越靠前</td>
+                </tr>
+            </table>
+
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="StoreId" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $("#DepartId").change(function(){
+            var url = '{:U("Ajax/getKdepartUser")}',
+                    pid = $(this).val();
+            StoreId = "{$_GET['id']}";
+            $.post(url, {pid:pid,StoreId:StoreId}, function(result){
+                if(result!=''){
+                    // $(".sells").addClass("active").html(result);
+                    $('.kstores').html(result);
+                    // $('.kstores').refresh();
+                }else{
+
+                }
+            });
+        });
+
+//    $('.checkall').click(function(){
+//        var pbody = $(this).parents('.panel').children('.panel-body ');
+//        var input =pbody.find('input[type="checkbox"]').each(function(){
+//            input.attr('input:checkbox',checked);
+//        });
+//        //alert($this);
+//    });
+        $(document).on("click", ".checkall", function(){
+            var $this = $(this);
+            var parentBox = $this.parents(".panel");
+            var panelBody = parentBox.find(".panel-body");
+            panelBody.find('input[type="checkbox"]').prop("checked", $this.prop("checked"));
+        });
+
+    });
+</script>

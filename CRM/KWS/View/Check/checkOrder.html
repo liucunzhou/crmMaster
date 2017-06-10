@@ -1,0 +1,203 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="space-10"></div>
+    <form action="{:U('Customer/ajaxGetCustomers')}" class="form-search form-inline" role="form">
+        <div class="form-group">
+            <label for="CustId">客户编号</label>
+            <input type="text" class="form-control" name="CustId" id="CustId">
+        </div>
+        <div class="form-group">
+            <label for="Mobile">手机号</label>
+            <input type="text" class="form-control" name="Mobile" id="Mobile">
+        </div>
+        <input type="submit" class="btn btn-primary" value="搜索">
+    </form>
+    <div class="space-10"></div>
+    <div id="customers"></div>
+    <div class="space-10"></div>
+    <form class="form form-doCheckOrder form-horizontal" action="{:U('Check/doCheckOrder')}">
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    <h4 class="text-left">订单信息</h4>
+                </td>
+                <td></td>
+                <td></td>
+                <td class="text-left">
+                    <input type="submit" class="btn btn-primary" value="保存">
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left w-percent-10">订单ID</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="OrderId" value="{$Order['orderid']}" />
+                </td>
+                <td class="text-left w-percent-10">订单NO</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="OrderNo" value="{$Order['orderno']}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">订单套系</td>
+                <td class="text-left">
+                    <input type="text" name="Money" value="{$Order['money']}" />
+                </td>
+                <td class="text-left">支付金额</td>
+                <td class="text-left">
+                    <input type="text" name="PayMoney" value="{$Order['paymoney']}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">客户ID</td>
+                <td class="text-left">
+                    <input type="text" name="CustId" value="{$Order['custid']}" />
+                </td>
+                <td class="text-left">客资来源</td>
+                <td class="text-left">
+                    <input type="text" name="SourceFrom" value="{$Order['sourcefrom']}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">客户姓名</td>
+                <td class="text-left">
+                    <input type="text" name="CustomerName" value="{$Order['customername']}" />
+                </td>
+                <td class="text-left">联系电话</td>
+                <td class="text-left">
+                    <input type="text" name="Mobile" value="{$Order['mobile']}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">大区ID</td>
+                <td class="text-left">
+                    <input type="text" name="Kid" value="{$Order['kid']|default=0}" />
+                </td>
+                <td class="text-left">添加ID</td>
+                <td class="text-left">
+                    <input type="text" name="Add_User" value="{$Order['add_user']|default=0}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">客服部门</td>
+                <td class="text-left">
+                    <input type="text" name="DepartId" value="{$Order['departid']|default=0}" />
+                </td>
+                <td class="text-left">客服编号</td>
+                <td class="text-left">
+                    <input type="text" name="SellerId" value="{$Order['sellerid']|default=0}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">邀约部门</td>
+                <td class="text-left">
+                    <input type="text" name="PdepartId" value="{$Order['pdepartid']|default=0}" />
+                </td>
+                <td class="text-left">邀约编号</td>
+                <td class="text-left">
+                    <input type="text" name="PromoterId" value="{$Order['promoterid']|default=0}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">录入时间</td>
+                <td class="text-left">
+                    <input type="text" name="InsertTime" value="{$Order['inserttime']}" />
+                </td>
+                <td class="text-left">订单时间</td>
+                <td class="text-left">
+                    <input type="text" name="OrderTime" value="{$Order['ordertime']}" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br />
+    <h4>支付信息</h4>
+    <br />
+    <table class="table table-bordered table-hover">
+        <tr>
+            <td>门店</td>
+            <td>客户ID</td>
+            <td>订单ID</td>
+            <td>订单NO</td>
+            <td>付款类型</td>
+            <td>相关金额</td>
+            <td>大区ID</td>
+            <td>客服部门ID</td>
+            <td>客服ID</td>
+            <td>邀约部门ID</td>
+            <td>邀约ID</td>
+            <td>订单时间</td>
+            <td>操作</td>
+        </tr>
+        <foreach item="v" name="PayLog">
+            <tr>
+                <td>
+                    {$v['storeid']}
+                    {$brands[$stores[$v['storeid']]['brandid']]['brandname']}{$stores[$v['storeid']]['storename']}
+                </td>
+                <td class="col-lg-1">{$v['custid']}</td>
+                <td>{$v['orderid']}</td>
+                <td>{$v['orderno']}</td>
+                <td>
+                    <switch name="v['ordertype']">
+                        <case value="1">全款</case>
+                        <case value="2">首付</case>
+                        <case value="3">尾款</case>
+                        <case value="4">定金</case>
+                        <default />{$v['ordertype']}
+                    </switch>
+                </td>
+                <td>
+                    <ul class="text-left">
+                        <li>订单金额</li>
+                        <li>{$v['money']}</li>
+                        <li>支付金额</li>
+                        <li>{$v['paymoney']}</li>
+                    </ul>
+                </td>
+                <td>{$v['kid']}</td>
+                <td>{$v['departid']}</td>
+                <td>{$v['sellerid']}</td>
+                <td>{$v['pdepartid']}</td>
+                <td>{$v['promoterid']}</td>
+                <td>
+                    <ul class="text-left">
+                        <li>录入时间</li>
+                        <li>{$v['inserttime']}</li>
+                        <li>订单时间</li>
+                        <li>{$v['ordertime']}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>
+                            <form>
+                                <input type="submit" value="更新" class="btn btn-primary"/>
+                            </form>
+                        </li>
+                        <li><a href="javascript:void(0)" class="btn btn-primary">删除</a></li>
+                    </ul>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+</div>
+<script>
+$(function(){
+    $(".form-search").submit(function(){
+        var $this = $(this),
+            url = $this.attr("action");
+        $.get(url, $this.serialize(), function(result){
+            $("#customers").html(result);
+        }, 'html');
+        return false;
+    });
+
+    $(".form-doCheckOrder").submit(function(){
+        var $this = $(this),
+            url = $this.attr("action");
+        $.post(url, $this.serialize(), function(result){
+            $("#customers").html(result);
+        }, 'html');
+        return false;
+    });
+});
+</script>

@@ -1,0 +1,127 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="form form-eidit-customer" data-action="{:U('Promoter/doEditCustomer')}">
+            <table class="table table-hover">
+                <!-- 客户基本信息 -->
+                <tbody>
+                <tr>
+                    <td class="text-left" colspan="3">
+                        基本资料
+                    </td>
+                    <td class="text-right">
+                        <input type="hidden" name="CustId" value="{$d['custid']}" />
+                        <input type="submit" value="保存" class="btn btn-primary">
+                    </td>
+                </tr><php>$stores = D('Store')->getAllStore(true);</php>
+                <tr>
+                    <td class="td-title w-percent-10">客户编号</td>
+                    <td class="w-percent-40"><input type="text" readonly id="CustNo" name="CustNo" value="{$d['custno']}" /></td>
+
+                    <td class="td-title w-percent-10">门店</td>
+                    <td class="w-percent-40">
+                       <!-- <input type="text" value="{$brands[$stores[$d['storeid']]['brandid']]['brandname']}{$stores[$d['storeid']]['storename']}" readonly disabled/>-->
+                        <select name="StoreId" id="StoreId">
+                            <foreach item="v" name="stores">
+                                <option  <if condition="$d['storeid'] eq $key">selected</if> value="{$key}" >{$brands[$stores[$key]['brandid']]['brandname']}{$stores[$key]['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10">客户姓名</td>
+                    <td class="w-percent-40">
+                        <input type="text" id="CustName" name="CustName" value="{$d['custname']}" />
+                    </td>
+                    <td class="td-title w-percent-10">称呼</td>
+                    <td class="w-percent-40">
+                        <select  id="Sex" name="Sex" >
+                            <option <if condition="$d['sex'] eq -1">selected</if> value="-1">未知</option>
+                            <option <if condition="$d['sex'] eq 1">selected</if> value="1">先生</option>
+                            <option <if condition="$d['sex'] eq 0">selected</if> value="0">女士</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="4">联系方式</td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10">客户手机</td>
+                    <td class="w-percent-40"><input type="text" name="Mobile"  id="Mobile" value="{$d['mobile']}" /></td>
+                    <td class="td-title w-percent-10">微信号</td>
+                    <td class="w-percent-40"><input type="text" name="WeChat"  id="WeChat" value="{$d['wechat']}" ></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10">QQ号</td>
+                    <td class="w-percent-40"><input type="text" name="QQ" id="QQ" value="{$d['qq']}"/></td>
+                    <td class="td-title w-percent-10">QQ验证</td>
+                    <td class="w-percent-40"><input type="text" name="QQCode"  id="QQCode"  value="{$d['qqcode']}" ></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10">微博昵称</td>
+                    <td class="w-percent-40"><input type="text" name="WeiboName" id="WeiboName" value="{$d['weiboname']}" /></td>
+                    <if condition="$user['kid'] eq '12'">
+                        <td class="td-title">旺旺号码</td>
+                        <td><input type="text" name="Wang" id="Wang" value="{$d['wang']}"/><span class="wang-tip"></span></td>
+                    <else />
+                        <td></td>
+                        <td></td>
+                    </if>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10">来源渠道</td>
+                    <td class="w-percent-40">
+                        <select name="SourceFrom" id="SourceFrom">
+                            <option>--请选择--</option>
+                            <foreach name="sources" item="s">
+                                <option  <if condition="$d['sourcefrom'] eq $s['sourceid']">selected</if> value="{$s['sourceid']}" >{$s['sourcename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title w-percent-10">来源关键字</td>
+                    <td class="w-percent-40">
+                        <input type="text" name="Keywords" id="Keywords" value="{$d['keywords']}"/>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td class="td-title">备注</td>
+                    <td class="w-percent-40" colspan="3">
+                        <textarea name="Remark" id="Remark" rows="10" class="w-percent-100">{$d['remark']}</textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+$(function(){
+    var reg = /^13[0-9]{1}[0-9]{8}$|15[0-9]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$|14[0-9]{1}[0-9]{8}$|17[0-9]{1}[0-9]{8}$/;
+    $("form.form-eidit-customer").submit(function() {
+        var $this = $(this);
+
+        var Mobile = $("#Mobile").val();
+        if(Mobile != '' && !reg.test(Mobile)){
+            layer.msg('请输入正确的手机号码');
+            return false;
+        }
+
+        var url = $this.attr('data-action');
+        $.post(url, $this.serialize(), function(data) {
+            if (data.redirect != undefined) {
+                window.location.href = data.redirect;
+            } else if(data.layer == 'yes') {
+                parent.window.location.reload();
+            } else if(data.reload == 'yes') {
+                window.location.reload();
+            } else {
+                alert(data.msg);
+                $('.change-verify').trigger("click");
+                $this.find('input[name="' + data.id + '"]').siblings(".error-tip").html(data.msg).show();
+            }
+        }, 'json');
+        return false;
+    });
+})
+</script>

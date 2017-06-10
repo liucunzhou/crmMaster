@@ -1,0 +1,219 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售管理</li>
+                <li>客户信息</li>
+            </ul>
+            <include file="Common:back"/>
+        </div>
+
+        <form method="get" action="{:U('Washing/index')}">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}">
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}">
+
+            <div class="toolbox clearfix">
+                <div class="pull-left">
+                    <a class="btn btn-primary {:check_rule($RulesBlack, 'Seller/addCustomer')}"
+                       href="{:U('Seller/addCustomer')}"><span class="glyphicon glyphicon-plus"></span>&nbsp;添加客户</a>
+                    <a class="btn btn-primary {:check_rule($RulesBlack, 'Seller/expSeller')}"
+                       href="{:U('Seller/expSeller',$_GET)}"><span class="glyphicon glyphicon-plus"></span>&nbsp;导出</a>
+                </div>
+                <div class="pull-right">
+                    <input type="text" name="InsertStart" value="{$_GET['InsertStart']}" placeholder="录入开始时间"
+                           class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    至
+                    <input type="text" name="InsertEnd" value="{$_GET['InsertEnd']}" placeholder="录入结束时间" class="Wdate"
+                           onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                </div>
+            </div>
+            <div class="space-10"></div>
+            <table class="table table-responsive table-striped table-bordered table-hover">
+                <tr class="table-header">
+                    <td><input type="text" name="CustNo" class="s-custno-input" value="{$_GET['CustNo']}"></td>
+                    <td><input name="CustName" type="text" class="s-custname-input" value="{$_GET['CustName']}"></td>
+                    <td>
+                        <select name="StoreId" class="s-storeid-select">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="kstores">
+                                <option value="{$v['storeid']}"
+                                <if condition="$v['storeid'] eq $_GET['StoreId']">selected</if>
+                                >{$brand[$v['brandid']]['brandname']}{$v['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td><input type="text" name="Mobile" class="s-mobile-input" value="{$_GET['Mobile']}"></td>
+                    <td><input type="text" name="WeChat" class="s-wechat-input" value="{$_GET['WeChat']}"></td>
+                    <td><input type="text" name="WeiboName" class="s-weiboname-input" value="{$_GET['WeiboName']}"></td>
+                    <td><input type="text" name="QQ" class="s-qq-input" value="{$_GET['QQ']}"></td>
+                    <td></td>
+                    <td>
+                        <select name="Status" class="s-status-select">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="status">
+                                <option value="{$key}"
+                                <if condition="$key eq $_GET['Status']">selected</if>
+                                >{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>
+                        <select name="IsOrder" class="s-isorder-select">
+                            <option value="-1">订单</option>
+                            <option value="1"
+                            <if condition="1 eq $_GET['IsOrder']">selected</if>
+                            >是</option>
+                            <option value="0"
+                            <if condition="0 eq $_GET['IsOrder']">selected</if>
+                            >否</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <select name="SourceFrom" class="s-sourcefrom-select">
+                            <option value="0">请选择</option>
+                            <foreach item="v" name="source">
+                                <option value="{$key}"
+                                <if condition="$key eq $_GET['SourceFrom']">selected</if>
+                                >{$v['sourcename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td align="center">
+                        <select name="Opeartor">
+                            <option value="">请选择</option>
+                            <foreach item="v" name="promoters">
+                                <option value="{$v}"
+                                <if condition="$_GET['Opeartor'] eq $v">selected</if>
+                                >{:D('User')->getUser($v,'realname')}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td align="center">
+                        <select name="salseId">
+                            <option value="-1">请选择</option>
+                            <foreach item="v" name="sellers">
+                                <option value="{$v}"
+                                <if condition="$_GET['salseId'] eq $v">selected</if>
+                                >{:D('User')->getUser($v,'realname')}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td><input type="submit" class="btn btn-primary s-submit-input" value="快捷搜索"/></td>
+                </tr>
+                <tr class="table-header">
+                    <td>客户编号</td>
+                    <td>客户姓名</td>
+                    <td>咨询门店</td>
+                    <td>手机号</td>
+                    <td>微信号</td>
+                    <td>微博昵称</td>
+                    <td>QQ号</td>
+                    <td>接受状态</td>
+                    <td>回访状态</td>
+                    <td>回访次数</td>
+                    <td>订单</td>
+                    <td>录入时间</td>
+                    <td>最后回访时间</td>
+                    <td>销售来源</td>
+                    <td>邀约手</td>
+                    <td>接单销售</td>
+                    <td>操作</td>
+                </tr>
+                <foreach item="val" name="list">
+                    <tr class="<if condition=" $val[
+                    'isrepeat'] eq 1">color-red</if>
+                    <notempty name="val['color']">status-color</notempty>
+                    "
+                    <notempty name="val['color']">style="background-color:{$val['color']};"</notempty>
+                    >
+                    <td>{$val['custno']}</td>
+                    <td>
+                        {$val['custname']}&nbsp;
+                        <span class="hidden"><php>$remark=D('Visit')->getVisitRemark($val['custid']);</php></span>
+                        <empty name="remark">
+                            <notempty name="val['remark']">
+                                <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip"
+                                      data-placement="top" title="{$val['remark']}"></span>
+                            </notempty>
+                            <else/>
+                            <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip"
+                                  data-placement="top" title="{$remark}"></span>
+                        </empty>
+                    </td>
+                    <td>
+                        {$brand[$store[$val['storeid']]['brandid']]['brandname']}{$store[$val['storeid']]['storename']}
+                    </td>
+                    <td>{$val['mobile']}</td>
+                    <td>{$val['wechat']}</td>
+                    <td>{$val['weiboname']}</td>
+                    <td>{$val['qq']}</td>
+                    <td>
+                        <span class="accpet-status">{:D('Assign')->getFieldInfo($val['custid'] ,'status')}</span>
+                    </td>
+                    <td>
+                        <div
+                        <empty name="val['status']">class="weihuifang-color"</empty>
+                        <if condition="$val['status'] eq 25">class="weiyanzheng-color"</if>
+                        >
+                        <a href="javascript:void(0)" class="action-layer"
+                           data-action="{:U('Seller/addVisit',array('id'=>$val['custid']))}" layer-title="编辑回访信息"
+                           layer-width="1000px" layer-height="500px">
+                            {$status[$val['status']]?$status[$val['status']]:'未回访'}
+                        </a>
+    </div>
+    </td>
+    <td>{:D('Customer')->getVisitTimes($val['custid'])}</td>
+    <td>{$val['isorder']?'是':'否'}</td>
+    <td>{$val['inserttime']}</td>
+    <td>{$val['lastvisittime']}</td>
+    <td>{$source[$val['sourcefrom']]}</td>
+    <td>{:D('User')->getUser($val['opeartor'], 'realname')}</td>
+    <td>
+        {:D('Assign')->getAssigndata( $val['custid'], 'nowuser')}
+        <php>$isLock = D('User')->getUser($val['salseid'], 'islock');</php>
+        <if condition="$isLock eq '1'">
+            <span class="glyphicon glyphicon-lock" title="已离职员工"></span>
+        </if>
+    </td>
+    <td>
+        <notempty name="val['isassign']">
+            <if condition="$val['storeid'] eq 65">
+                <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Washing/editBCust')}"
+                   data-action="{:U('Washing/editBCust',array('id'=>$val['custid']))}" layer-title="编辑月子客户信息"
+                   layer-width="1000px" layer-height="500px">[编辑]</a>&nbsp;
+                <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Washing/addBVisit')}"
+                   data-action="{:U('Washing/addBVisit',array('id'=>$val['custid']))}" layer-title="编辑月子回访信息"
+                   layer-width="1000px" layer-height="500px">[回访]</a>
+                <else/>
+                <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Washing/editCust')}"
+                   data-action="{:U('Washing/editCust',array('id'=>$val['custid']))}" layer-title="编辑客户信息"
+                   layer-width="1000px" layer-height="500px">[编辑]</a>&nbsp;
+                <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Washing/addVisit')}"
+                   data-action="{:U('Washing/addVisit',array('id'=>$val['custid']))}" layer-title="编辑回访信息"
+                   layer-width="1000px" layer-height="500px">[回访]</a>
+            </if>
+            <else/>
+            <a href="javascript:void(0)" class=" action-layer {:check_rule($RulesBlack, 'Washing/deAssign')}"
+               data-action="{:U('Washing/deAssign',['custId'=>$val['custid']])}" layer-title="重新分配" layer-width="300px"
+               layer-height="300px">[重新分配]</a>
+
+        </notempty>
+        <!--<a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Seller/editCust')}" data-action="{:U('Seller/editCust',array('id'=>$val['custid']))}" layer-title="编辑客户信息" layer-width="1000px" layer-height="500px">[编辑]</a>&nbsp;
+        <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Seller/addVisit')}" data-action="{:U('Seller/addVisit',array('id'=>$val['custid']))}" layer-title="编辑回访信息" layer-width="1000px" layer-height="500px">[回访]</a>
+        <a href="javascript:void(0)" class="action-delete {:check_rule($RulesBlack, 'Washing/delCust')}" data-action="{:U('Washing/delCust',array('id'=>$val['custid']))}" data-tip="{$val.custname}" >[删除]</a>-->
+    </td>
+    </tr>
+    </foreach>
+    </table>
+    </form>
+    {$page}
+</div>
+</div>
+{:D('Assign')->getFieldInfo()}

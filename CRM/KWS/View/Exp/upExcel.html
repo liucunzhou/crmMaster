@@ -1,0 +1,278 @@
+<link rel="stylesheet" type="text/css" href="/assets/admin/css/useselect.css">
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>数据统计</li>
+                <li>订单比较</li>
+                <li>上传比较订单</li>
+            </ul>
+            <include file="Common:backWithSearch"/>
+        </div>
+    <meta charset="utf-8"/>
+
+    <script src="/assets/js/ajaxfileupload.js"></script>
+    <link rel="stylesheet" href="/assets/admin/css/mask.css">
+
+
+    <div class="gw service">
+        <div class="service-content">
+            <div class="service-detail">
+
+                <div class="service-detail-head">
+                    <div class="service-btn">
+                        <a href="javascript:;" class="drbzjhBtn">导入比较订单</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="space-10"></div>
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="tabele table-bordered table-search">
+                    <tr>
+                        <td class="w-percent-3 padding-none">序号</td>
+                        <td class="text-left w-percent-5">
+                            <input type="text" name="XbbOrderNo" placeholder="熊宝贝订单号">
+                        </td>
+                        <td class="text-left w-percent-5">
+                            <input type="text" name="PaperOrderNo" placeholder="纸质订单号">
+                        </td>
+                        <td class="text-left w-percent-5">
+                            <input type="text" name="CrmOrderNo" placeholder="CRM订单号">
+                        </td>
+                        <td class="w-percent-5"></td>
+                        <!--<td class="w-percent-5"></td>
+                        <td class="w-percent-5"></td>-->
+                        <td class="w-percent-5"></td>
+                        <td class="w-percent-5"></td>
+                        <td class="w-percent-5">订单类别</td>
+                        <td class="w-percent-5">平台</td>
+                        <td class="w-percent-5">来源</td>
+                        <td class="w-percent-5">订单日期</td>
+                        <td class="text-left w-percent-5">支付时间</td>
+                        <td class="w-percent-5">客服</td>
+                        <td class="w-percent-5">CRM客服</td>
+                        <td class="w-percent-5">
+                            <select name="DepartId" id="DepartId" class="search-items">
+                                    <option value="-1">--所在部门--</option>
+                                <foreach item="v" name="sells">
+                                    <option value="{$v['departid']}" <if condition="$v[departid] eq $_GET['DepartId']">selected="selected"</if>>
+                                    {:str_repeat('&nbsp;', (get_deep($v["dpath"])-2) * 5)}
+                                    {$v['departname']}
+                                    </option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <td class="w-percent-5">
+                            <select name="Kid">
+                                    <option value="-1">大区</option>
+                                <foreach item="v" name="ks">
+                                    <option value="{$v['departid']}">{$v['departname']}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <td class="w-percent-5">
+                            <select name="InputStatus" id="InputStatus">
+                                <option value="-1">是否录入订单</option>
+                                <option value="1" <if condition="$_GET['InputStatus'] eq '1'">selected</if>>已录入</option>
+                                <option value="0" <if condition="$_GET['InputStatus'] eq '0'">selected</if>>未录入</option>
+                            </select>
+                        </td>
+                        <td class="w-percent-5">比较结果</td>
+                        <td class="w-percent-5">
+                            <input type="submit" class="w-percent-100 btn btn-system" value="搜索"/>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+        <div class="space-10"></div>
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="w-percent-3 padding-none">序号</td>
+                <td class="text-left w-percent-5">熊宝贝订单号</td>
+                <td class="text-left w-percent-5">纸质订单号</td>
+                <td class="text-left w-percent-5">crm订单号</td>
+                <!--<td class="w-percent-5">新郎手机号</td>
+                <td class="w-percent-5">新娘手机号</td>-->
+                <td class="w-percent-5">套系金额</td>
+                <td class="w-percent-5">已付金额</td>
+                <td class="w-percent-5">有效订单数</td>
+                <td class="w-percent-5">订单类别</td>
+                <td class="w-percent-5">平台</td>
+                <td class="w-percent-5">来源</td>
+                <td class="w-percent-5">订单日期</td>
+                <td class="text-left w-percent-5">支付时间</td>
+                <td class="w-percent-5">客服</td>
+                <td class="w-percent-5">CRM客服</td>
+                <td class="w-percent-5">部门</td>
+                <td class="w-percent-5">大区</td>
+                <td class="w-percent-5">录入状态</td>
+                <td class="w-percent-5">比较结果</td>
+                <td class="w-percent-5">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td>{$key+1}</td>
+                    <td>{$val['xbborderno']}</td>
+                    <td>{$val['paperorderno']}</td>
+                    <td>{$val['crmorderno']}</td>
+                   <!-- <td>{$val['bride']}</td>
+                    <td>{$val['groom']}</td>-->
+                    <td>{$val['setprice']}</td>
+                    <td>{$val['receipt']}</td>
+                    <td>{$val['effectiveordernum']}</td>
+                    <td>
+                        <switch name="val['ordertype']">
+                            <case value="1">网单</case>
+                            <case value="3">邀约进店</case>
+                        </switch>
+                    </td>
+                    <td>{$val['platform']}</td>
+                    <td>{$sources[$val['sourcefrom']]['sourcename']}</td>
+                    <td>{$val['orderdate']}</td>
+                    <td>{$val['paytime']}</td>
+                    <td>{:D('User')->getUser($val['seller'],'realname')}</td>
+                    <td>{:D('User')->getUser($val['crmseller'],'realname')}</td>
+                    <td>{:D('Department')->getDepartment($val['departid'],'departname')}</td>
+                    <td>
+
+                        <foreach item="v" name="ks">
+                           <if condition="$v['departid'] eq $val['kid']">{$v['departname']}</if>
+                        </foreach>
+                    </td>
+                    <td>
+                        <switch name="val['inputstatus']">
+                            <case value="1">订单已录入</case>
+                            <case value="0">订单未录入</case>
+                        </switch>
+                    </td>
+                    <td>
+                        {$val['diff']}
+                    </td>
+                    <td></td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+        <div class="space-10"></div>
+    <div class="cus-win">
+        <div class="cus-win-mask">
+        </div>
+        <div class="cus-win-box">
+            <div class="cus-win-head">
+                <h3>导入要比较订单</h3>
+                <span>关闭</span>
+            </div>
+            <div class="cus-win-con">
+                <div class="cus-win-content">
+                    <div class="drbzjh-box">
+                        <div>
+                            <input type="file" name="upexcel" id="upexcel"/>
+                        </div>
+                        <a class="download hidden" href="">下载</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cus-win-foot">
+                <div class="cus-win-ok doUpexcel">
+                    确认
+                </div>
+                <div class="cus-win-cancel">
+                    取消
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.bzjhEditBtn').on('click', function () {
+            var op = {
+                winWidth: 800,
+                winHeight: 380,
+                contentHeight: 290
+            }
+            var htmlCon = '<div class="cus-win-box"><div class="cus-win-head"><h3>编辑</h3><span>关闭</span></div><div class="cus-win-con"><div class="cus-win-content"><div class="bzjh-edit-box"><div><span>项目编号：</span><input type="text" name=""></div><div><span>项目名称：</span><input type="text" name=""></div><div><span>承担单位：</span><input type="text" name=""></div><div><span>项目开始日期：</span><input type="text" name=""></div><div><span>实际验收日期：</span><input type="text" name=""></div><div><span>项目负责人：</span><input type="text" name=""></div><div><span>项目联系人：</span><input type="text" name=""></div><div><span>联系电话：</span><input type="text" name=""></div><div><span>联系邮箱：</span><input type="text" name=""></div><div><span>所属处室：</span><select><option>发展计划处</option><option>条件财务处</option><option>基地建设处</option><option>国际合作处</option><option>科普处</option></select></div></div></div></div><div class="cus-win-foot"><div class="cus-win-ok">确认</div><div class="cus-win-cancel">取消</div></div></div>';
+            showWin(op, htmlCon, 0);
+            var thisRec = $(this).parents('tr');
+            var thisRecAllTd = thisRec.find('td');
+            var bzjhEditBoxInp = $('.bzjh-edit-box').find('input');
+            var bzjhEditBoxSel = $('.bzjh-edit-box').find('select');
+            for (var i = 1; i <= 10; i++) {
+                if (i != 10) {
+                    bzjhEditBoxInp.eq(i - 1).val(thisRecAllTd.eq(i).text());
+                } else if (i == 10) {
+                    bzjhEditBoxSel.val(thisRecAllTd.eq(i).text());
+                }
+            }
+        });
+        // 导入编制计划
+        $('.drbzjhBtn').on('click', function () {
+            var op = {
+                winWidth: 400,
+                winHeight: 210,
+                contentHeight: 100
+            }
+            // var htmlCon = '<div class="cus-win-box"><div class="cus-win-head"><h3>导入编制计划</h3><span>关闭</span></div><div class="cus-win-con"><div class="cus-win-content"><div class="drbzjh-box"><div><input type="file" name="excel" id="upexcel"/></div></div></div></div><div class="cus-win-foot"><div class="cus-win-ok doUpexcel">确认</div><div class="cus-win-cancel">取消</div></div></div>';
+            $('.cus-win').show();
+            var cusWinBox = $('.cus-win-box').eq(0);
+            cusWinBox.prev('.cus-win-box').css({zIndex: 2});
+            cusWinBox.css({width: op.winWidth, height: op.winHeight, marginTop: - op.winHeight / 2, marginLeft: - op.winWidth / 2, zIndex: 5});
+            cusWinBox.find('.cus-win-con').css({height: op.contentHeight});
+            cusWinBox.find('.cus-win-content').css({width: op.winWidth-35});
+            $('.cus-win-mask').fadeIn(function () {
+                $('.cus-win-box').show();
+            });
+        });
+        // 窗口取消
+        $(document).on('click', '.cus-win-cancel', function () {
+            var thisBox = $(this).parents('.cus-win-box');
+            thisBox.hide();
+            $('.cus-win').hide();
+        });
+        $("#checkAll").click(function(){
+            $("input[type='checkbox']").prop("checked", $(this).prop("checked"));
+        });
+        // 窗口关闭
+        $(document).on('click', '.cus-win-head span', function () {
+            var thisBox = $(this).parents('.cus-win-box');
+            thisBox.hide();
+            $('.cus-win').hide();
+        });
+        $(".doUpexcel").click(function(){
+            layer.msg('正在上传......',{time:30000});
+            $.ajaxFileUpload ({
+                url: '{:U("doUpExcelTo")}',
+                secureuri: false,
+                fileElementId: 'upexcel',
+                dataType: 'json',
+                success: function (data, status)
+                {
+                    if(data.code == 200){
+                        //window.location.reload();
+                        $('.download').attr('href',data.expUrl);
+                        $('.download').removeClass('hidden');
+
+                    }else{
+                        alert(data.msg);
+                    }
+                },
+                error: function (data, status, e)//服务器响应失败处理函数
+                {
+                    alert(data);
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>

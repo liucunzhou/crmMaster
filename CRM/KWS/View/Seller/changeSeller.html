@@ -1,0 +1,41 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Seller/doChangeSeller')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">客户名称</td>
+                    <td class="text-left">
+                        {$d['custname']}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">当前客服</td>
+                    <td class="text-left">
+                        {:D('User')->getUser($d['salseid'],'realname')}
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">选择客服</td>
+                    <td class="text-left">
+                        <select name="salseId">
+                            <option value="-1">请选择</option>
+                            <foreach item="v" name="ksellers">
+                                <option value="{$v['userid']}">{$v['realname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes" />
+                <input type="hidden" name="CustId" value="{$d['custid']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+            </div>
+        </form>
+    </div>
+</div>

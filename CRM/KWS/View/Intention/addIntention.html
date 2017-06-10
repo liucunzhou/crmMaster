@@ -1,0 +1,38 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Intention/doEditIntention')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">状态名称</td>
+                    <td class="text-left">
+                        <input type="text" name="Sname" id="Sname" value="{$d['sname']}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">有效/无效</td>
+                    <td class="text-left">
+                        <select name="Display">
+                            <option value="1" <if condition="$d['display'] eq '1'">selected="selected"</if>>有效</option>
+                            <option value="0" <if condition="$d['display'] eq '0'">selected="selected"</if>>无效</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">意向排序</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}"/>
+                    </td>
+                    <td>值为整数,数值越大首页排的越靠前</td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+            </div>
+        </form>
+    </div>
+</div>

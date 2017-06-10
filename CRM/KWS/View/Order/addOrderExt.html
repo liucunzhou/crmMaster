@@ -1,0 +1,340 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <div class="space-10"></div>
+        <table class="w-percent-100 alert alert-success">
+            <tr>
+                <td class="w-percent-10">
+                    <div id="submit-add-form" class="btn btn-primary">保存</div>
+                </td>
+                <td class="w-percent-80">
+                    <h5><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;添加客资并录入订单</h5>
+                </td>
+                <td class="w-percent-10 text-right">
+                   <a class="btn btn-primary color1" href="javascript:history.go(-1)">返回</a>
+                </td>
+            </tr>
+        </table>
+        <form class="form form-add-order" data-action="{:U('Order/doAddOrderExt')}">
+            <div class="footer-fixed-bottom text-right">
+                <input type="hidden" name="layer" value="yes"/>
+            </div>
+            <table class="table table-responsive table-striped table-bordered table-hover">
+                <tr>
+                    <td colspan="4" class="alert-info text-left">
+                        <h4>客咨信息</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">客户姓名</td>
+                    <td class="text-left"><input type="text" name="CustName" id="CustName"/></td>
+                    <td class="td-title color-red">联系电话</td>
+                    <td class="text-left"><input type="text" name="Mobile" id="Mobile"/></td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">咨询门店</td>
+                    <td class="text-left">
+                        <select name="StoreId" id="StoreId">
+                            <option value="0">--请选择门店--</option>
+                            <foreach item="v" name="stores">
+                                <option value="{$v['storeid']}">{$brands[$v['brandid']]['brandname']}{$v['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title color-red">来源渠道</td>
+                    <td class="text-left">
+                        <select name="SourceFrom" id="SourceFrom">
+                            <option value="0">请选择</option>
+                            <foreach item="val" name="gsources">
+                                <optgroup label="{$key}">
+                                    <foreach item="v" name="val">
+                                        <option value="{$v['sourceid']}">{$v['sourcename']}</option>
+                                    </foreach>
+                                </optgroup>
+                            </foreach>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">销售客服</td>
+                    <td class="text-left">
+                        <select name="salseId" id="salseId">
+                            <option value="0">--请选择订单负责人--</option>
+                            <foreach item="v" name="ksellers">
+                                <option value="{$v}">
+                                    {:D('User')->getUser($v,'realname')}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="td-title color-red">咨询日期</td>
+                    <td class="text-left">
+                        <input type="text" name="CInertTime" id="CInertTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="alert-info text-left">
+                        <h4>订单信息</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">订单类型</td>
+                    <td class="text-left">
+                        <select name="CustomerType" id="CustomerType">
+                            <option value="0">请选择</option>
+                            <!--<option value="5">网转介绍</option>-->
+                            <option value="1">网单</option>
+                            <!--<option value="2">自然进店</option>-->
+                            <option value="3">邀约进店</option>
+                            <!--<option value="4">退款</option>-->
+                        </select>
+                    </td>
+                    <td class="td-title color-red">支付类型</td>
+                    <td class="text-left">
+                        <select name="OrderType" class="doubleselect" id="OrderType">
+                            <option value="0">请选择</option>
+                            <option value="1">全款</option>
+                            <option value="2">保留金</option>
+                            <option value="3">尾款</option>
+                            <option value="4">定金</option>
+                            <option value="5">退款</option>
+                            <option value="6">非订单尾款</option>
+                        </select>
+                        <select name="OrderPay" class="doubleselect" id="OrderPay">
+                            <option value="0">请选择支付方式</option>
+                            <option value="1">天猫</option>
+                            <option value="2">支付宝</option>
+                            <option value="3">银行卡</option>
+                            <option value="4">现金</option>
+                            <option value="5">大众点评闪汇</option>
+                            <option value="6">pos机刷卡</option>
+                            <option value="7">团购</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">订单编号</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" data-unique-action="{:U('Order/checkOrderNoUnique')}">
+                    </td>
+                    <td class="td-title">支付账号</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderAccount" id="OrderAccount" value="{$d['orderaccount']}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">套系金额</td>
+                    <td class="text-left">
+                        <input type="text" name="Money" id="Money" value="{$d['ordermoney']}">
+                    </td>
+                    <td class="td-title color-red">付款金额</td>
+                    <td class="text-left">
+                        <input type="text" name="PayMoney" id="PayMoney" value="{$d['paymoney']}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title color-red">订单时间</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderTime" id="OrderTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                    </td>
+                    <td class="td-title text-left">备注</td>
+                    <td class="text-left">
+                        <textarea name="Remarks">{$d.remarks}</textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-selectradio.js"></script>
+<script>
+    $(function () {
+        $("#salseId").multipleSelect({
+            filter: true,
+            width: '80%',
+            placeholder: '选择订单负责人',
+            single: true
+        });
+
+
+        $(".select").click(function () {
+            var url = $(this).attr('data-action');
+            $.get(url, function (data) {
+                for (i in data) {
+                    $("#" + i).val(data[i]);
+                }
+
+                $("#Company").val(data.storeid);
+            }, 'json');
+        });
+
+        var isOrderNoUnique = false;
+        $("#OrderNo").bind({
+            focus : function() {
+                $(this).removeClass("input-error");
+            },
+            blur : function(){
+                var $this = $(this),
+                        OrderNo = $this.val(),
+                        url = $this.attr("data-unique-action");
+
+                if (OrderNo == '') {
+                    layer.msg("请输入订单号")
+                    $this.addClass("input-error");
+                    return false;
+                }
+
+                $.post(url, {OrderNo:OrderNo}, function(result){
+                    if(result.code != '200') {
+                        layer.msg(result.msg);
+                        $this.addClass("input-error");
+                        isOrderNoUnique = false;
+                    } else {
+                        isOrderNoUnique = true;
+                    }
+                });
+            }
+        });
+
+        $(".form-add-order").focusin(function(){
+            $(".form-add-order .input-error").removeClass("input-error");
+        });
+
+        // 提交表单
+        $("#submit-add-form").click(function () {
+            var $this = $(".form-add-order");
+            var url = $this.attr('data-action');
+            // 检测客资信息
+            var CustName = $("#CustName").val();
+            var Mobile = $("#Mobile").val();
+            var StoreId = $("#StoreId").val();
+            var SourceFrom = $("#SourceFrom").val();
+            var salseId = $("#salseId").val();
+            var CInertTime = $("#CInertTime").val();
+
+            if(CustName == '') {
+                layer.msg("请输入客户姓名");
+                $("#CustName").addClass("input-error");
+                return false;
+            }
+
+            if(Mobile == '') {
+                layer.msg("请输入手机号");
+                $("#Mobile").addClass("input-error");
+                return false;
+            }
+
+            if(!/^1(3|4|5|7|8)\d{9}$/.test(Mobile)) {
+                layer.msg("手机号格式不正确");
+                $("#Mobile").addClass("input-error");
+                return false;
+            }
+
+            if(StoreId == 0) {
+                layer.msg("请选择门店");
+                $("#StoreId").addClass("input-error");
+                return false;
+            }
+
+            if(SourceFrom == 0) {
+                layer.msg("请选择来源渠道");
+                $("#SourceFrom").addClass("input-error");
+                return false;
+            }
+
+            if(salseId == 0) {
+                layer.msg("请选择销售客服");
+                $("#salseId").addClass("input-error");
+                return false;
+            }
+
+            if(CInertTime == '') {
+                layer.msg("请选择客资录入时间");
+                $("#CInsertTime").addClass("inpurt-error");
+                return false;
+            }
+
+            // 检测订单信息
+            var OrderNo = $("#OrderNo").val();
+            var CustomerType = $("#CustomerType").val();
+            var Money = $('#Money').val();
+            var PayMoney = $('#PayMoney').val();
+            var OrderType = $("#OrderType").val();
+            var OrderTime = $('#OrderTime').val();
+
+            if (OrderNo == '') {
+                layer.msg('请填写订单号');
+                $("#OrderNo").addClass("input-error");
+                return false;
+            }
+
+            if (!isOrderNoUnique) {
+               layer.msg('订单号已存在，请更换订单号或联系系统管理员');
+                $("#OrderNo").addClass("input-error");
+                return false;
+            }
+
+            if(CustomerType == '0') {
+                layer.msg('请选择订单类型');
+                $("#CustomerType").addClass("input-error");
+                return false;
+            }
+
+            if(OrderType == '0') {
+                layer.msg('请选择支付类型');
+                $("#OrderType").addClass("input-error");
+                return false;
+            }
+
+            if (!Money) {
+                layer.msg('套系金额不能为空');
+                return false;
+            }
+
+            if (!PayMoney) {
+                layer.msg('付款金额不能为空');
+                return false;
+            }
+
+            if (!OrderTime || OrderTime=='0000-00-00 00:00:00') {
+                layer.msg('订单时间不能为空');
+                return false;
+            }
+
+            if(OrderType == '1' && Money != PayMoney){
+                layer.msg('支付金额需要与套系金额一致');
+                return false;
+            }
+
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : $this.serialize(),
+                beforeSend : function() {
+                    layer.load(1, {
+                        shade: [0.1, '#000'] // 0.1透明度的黑色背景
+                    });
+                },
+                complete : function() {
+                    layer.closeAll("loading");
+                },
+                success : function(data) {
+                    if (data.redirect != undefined) {
+                        window.location.href = data.redirect;
+                    } else if (data.layer == 'yes') {
+                        parent.window.location.reload();
+                    } else if (data.reload == 'yes') {
+                        window.location.reload();
+                    } else {
+                        alert(data.msg);
+                        $('.change-verify').trigger("click");
+                        $this.find('input[name="' + data.id + '"]').siblings(".error-tip").html(data.msg).show();
+                    }
+                }
+            });
+
+            return false;
+        });
+    })
+</script>

@@ -1,0 +1,91 @@
+<div class="clearfix page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>基本配置</li>
+                <li>平台来源管理</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+                <li class="{:check_rule($RulesBlack, 'Source/addSource')}">
+                    <a href="javascript:void(0)" class="action-layer" data-action="{:U('Source/addSource')}"
+                       layer-title="添加平台来源" layer-width="300px" layer-height="260px" title="添加来源">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="text">添加来源</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{:U('Source/expSource')}" title="导出来源">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出来源</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <table class="w-percent-100">
+                <tr>
+                    <td class="w-percent-10">
+                        <input type="text" id="SourceId" name="SourceId" value="{$_GET['SourceId']}" class="form-control" placeholder="编号"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="Platform" id="Platform" class="form-control">
+                            <option value="0">--平台--</option>
+                            <foreach item="v" name="Platforms">
+                                <option value="{$v}" <if condition="$_get['Platform'] eq $v">selected</if>>{$v}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-65">
+                        <input type="text" name="SourceName" id="SourceName" value="{$_GET['SourceName']}" class="form-control" placeholder="来源名称"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$_GET['OrderNo']}" class="form-control" placeholder="排序"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <div class="w-percent-100 clearfix">
+                            <a href="javascript:void(0)" class="w-percent-100 pull-left btn btn-system btn-search">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="w-percent-10">编号</td>
+                <td class="w-percent-10">所属类别</td>
+                <td class="text-left w-percent-65">来源名称</td>
+                <td class="w-percent-5">排序</td>
+                <td class="w-percent-10">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td>{$val['sourceid']}</td>
+                    <td>{$val['platform']}</td>
+                    <td class="text-left">{$val['sourcename']}</td>
+                    <td class="text-center">{$val['orderno']}</td>
+                    <td class="operates">
+                        <a href="javascript:void(0)" class="action-layer {:check_rule($RulesBlack, 'Source/editSource')}" data-action="{:U('Source/editSource',['id' => $val['sourceid']])}" layer-title="编辑平台来源" layer-width="300px" layer-height="260px">[编辑]</a>
+                        <!--<a href="javascript:void(0)" class="action-delete {:check_rule($RulesBlack, 'Source/delSource')}" data-action="{:U('Source/delSource', ['id'=>$val['sourceid']])}" data-tip="确认删除{$val['sourcename']}么？">[删除]</a>-->
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>

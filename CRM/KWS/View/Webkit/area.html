@@ -1,0 +1,31 @@
+<script>
+    var ajaxurl="{:U('Tool/getArea')}";
+    function loadArea(areaId,areaType) {
+        $.post(ajaxurl,{'areaId':areaId},function(data){
+            if(areaType=='city'){
+                $('#'+areaType).html('<option value="-1">市/县</option>');
+                $('#district').html('<option value="-1">镇/区</option>');
+            }else if(areaType=='district'){
+                $('#'+areaType).html('<option value="-1">镇/区</option>');
+            }
+            if(areaType!='null'){
+                $.each(data,function(no,items){
+                    opt = $("<option/>").text(items.area_name).attr("value", items.area_id);
+                    $('#'+areaType).append(opt);
+                });
+            }
+        });
+    }
+</script>
+<select name="province" id="province" onchange="loadArea(this.value,'city')" class="area">
+    <option value="-1" selected>省份/直辖市</option>
+    <volist name="province" id="one">
+        <option value="{$one.area_id}">{$one.area_name}</option>
+    </volist>
+</select>
+<select name="city" id="city" onchange="loadArea(this.value,'district')" class="area">
+    <option value="-1">市/县</option>
+</select>
+<select name="district" id="district" onchange="loadArea(this.value,'null')" class="area">
+    <option value="-1">镇/区</option>
+</select>

@@ -1,0 +1,145 @@
+<div class="page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售管理</li>
+                <li>婚礼季</li>
+            </ul>
+            <ol class="breadcrumb pull-right">
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ol>
+        </div>
+
+        <!-- 检索表单 -->
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="table table-bordered table-search">
+                <tr>
+                    <td class="w-percent-5 text-center">&nbsp;</td>
+                    <td class="w-percent-10">
+                        <input type="text" name="id" value="{$_GET['id']}" placeholder="客资ID"/>
+                    </td>
+                    <td class="w-percent-20">
+                        <input type="text" name="mobile" value="{$_GET['mobile']}" placeholder="手机号"/>
+                    </td>
+                    <td class="w-percent-20">
+                        <input type="text" name="StartInsertTime" id="StartInsertTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.StartInsertTime">{$Think.get.StartInsertTime}</notempty>" placeholder="录入开始时间"/>
+                        <input type="text" name="EndInsertTime" id="EndInsertTime" class="Wdate border-top" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.EndInsertTime">{$Think.get.EndInsertTime}</notempty>" placeholder="录入结束时间"/>
+                    </td>
+                    <td class="w-percent-15">
+                        <input type="text" name="province" value="{$_GET['province']}" placeholder="省份"/>
+                    </td>
+                    <td class="w-percent-15">
+                        <input type="text" name="city" value="{$_GET['city']}" placeholder="城市"/>
+                    </td>
+                    <td class="w-percent-15"><input type="submit" class="w-percent-100 btn btn-system" value="搜索"/></td>
+                </tr>
+            </table>
+        </form>
+        <div class="space-10"></div>
+        <div class="toolbar">
+            <select class="store" id="store">
+                <option value="0">请选择门店</option>
+                <foreach item="v" name="kstores">
+                    <if condition="$v['brandid'] eq '1'">
+                        <option value="{$v['storeid']}" <if condition="in_array($v['storeid'],$_GET['StoreId'])">selected</if>>{$brands[$v['brandid']]['brandname']}{$v['storename']}</option>
+                    </if>
+                </foreach>
+            </select>
+            <button class="btn btn-system btn-push-all">推送</button>
+        </div>
+        <div class="space-10"></div>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="w-percent-5 text-center">
+                        <input type="checkbox" id="checkAll">
+                    </th>
+                    <th class="w-percent-10">客资ID</th>
+                    <th class="w-percent-20">客户姓名</th>
+                    <th class="w-percent-20">手机号</th>
+                    <th class="w-percent-15">录入时间</th>
+                    <th class="w-percent-15">所在省份</th>
+                    <th class="w-percent-15">所在城市</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach item="val" name="list">
+                    <tr>
+                        <td class="text-center">
+                            <input type="checkbox" name="season[]" value="{$val['id']}"/>
+                        </td>
+                        <td class="text-left">{$val['id']}</td>
+                        <td class="text-left">{$val['custname']}</td>
+                        <td class="text-left">{$val['mobile']}</td>
+                        <td class="text-left">{$val['inserttime']|date="Y-m-d H:i:s", ###}</td>
+                        <td class="text-left">{$val['province']}</td>
+                        <td class="text-left">{$val['city']}</td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        {$page}
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-select.js"></script>
+<script>
+$(function(){
+    $("#checkAll").click(function(){
+       $("input[name='season[]']").prop('checked', $(this).prop("checked"));
+    });
+
+    $(".btn-push-all").click(function(){
+        var store = $("#store").val();
+        if(store == '0') {
+            alert("请选择要推送的门店");
+            return false;
+        }
+
+        var checkeds = $("input[name='season[]']:checked");
+        if(checkeds.length == 0) {
+            alert("请选择要推送的客资");
+            return false;
+        }
+
+        var ids = '';
+        checkeds.each(function (i, n) {
+            if(i == 0) {
+                ids = $(n).val();
+            } else {
+                ids += ',' + $(n).val();
+            }
+        })
+
+        var url = '{:U("Season/pushUnstore")}';
+        $.get(url, {StoreId:store, ids:ids}, function (result) {
+            if (result.code == '200') {
+                if(confirm(result.msg + ',是否刷新页面？点击是刷新页面')) {
+                    window.location.reload();
+                }
+            } else {
+                alert(result.msg);
+            }
+        });
+    });
+
+    $(".store").multipleSelect({
+        filter: true,
+        width: '100%',
+        single: true,
+        placeholder: '选择门店'
+    });
+});
+</script>

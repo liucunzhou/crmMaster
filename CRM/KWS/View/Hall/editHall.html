@@ -1,0 +1,52 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form form-layer" data-action="{:U('Hall/doEditHall')}">
+            <table class="table table-hover">
+                <tr>
+                    <td class="td-title text-left">婚宴厅名称</td>
+                    <td class="text-left">
+                        <input type="text" name="HallName" id="HallName" value="{$d['hallname']}">
+                        <p class="input-tip"></p>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">所属门店</td>
+                    <td class="text-left">
+                        <select name="StoreId" id="StoreId">
+                            <option>--选择门店--</option>
+                            <foreach item="v" name="values">
+                                <option value="{$v['storeid']}" <if condition="$v['storeid'] eq $d['storeid']">selected</if>>
+                                    {$brands[$stores[$v['storeid']]['brandid']]['brandname']}
+                                    {$v['storename']}
+                                </option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">最大桌数</td>
+                    <td class="text-left">
+                        <input type="text" name="MaxTables" id="MaxTables" value="{$d['maxtables']}">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="td-title text-left">婚宴厅排序</td>
+                    <td class="text-left">
+                        <input type="text" name="OrderNo" id="OrderNo" value="{$d['orderno']}"/>
+                        <p class="input-tip"></p>
+                    </td>
+                    <td>值为整数,数值越大首页排的越靠前</td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>

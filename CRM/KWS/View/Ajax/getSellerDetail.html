@@ -1,0 +1,34 @@
+<select name="SellerId" id="Seller" class="w-percent-20 selectpicker"  multiple="false">
+    <option value="0">请选择订单负责人</option>
+    <foreach item="v" name="ksellers">
+        <option value="{$v}" <if condition="$v eq $seller">selected</if>>{:D('User')->getUser($v,'realname')}</option>
+    </foreach>
+</select>
+<select name="Kid" id="Kid" class="w-percent-20">
+    <option value="0">请选择大区</option>
+    <foreach item="v" name="ks">
+        <option <if condition="$kid eq $v['departid']">selected</if> value="{$v['departid']}">{$v['departname']}</option>
+    </foreach>
+</select>
+<select name="DepartId" id="DepartId" class="w-percent-40">
+    <option value="-1">--选择部门--</option>
+    <foreach item="v" name="sells">
+        <option value="{$v['departid']}" <if condition="$v[departid] eq $departId">selected</if>>
+        {:str_repeat('&nbsp;', (get_deep($v["dpath"])-2) * 5)}
+        {$v['departname']}
+        </option>
+    </foreach>
+</select>
+
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-selectradio.js"></script>
+<script>
+    $(function () {
+        $("#Seller").multipleSelect({
+            filter: true,
+            width: '80%',
+            placeholder: '请选择订单负责人',
+            single: true
+        });
+    });
+</script>

@@ -1,0 +1,45 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Admin/doEditCustomer')}">
+            <table class="table table-hover">
+                <!-- 客户基本信息 -->
+                <tbody>
+                <tr>
+                    <td class="text-left" colspan="3">
+                        客户基本资料
+                    </td>
+                    <td class="text-right">
+                        <input type="hidden" name="id" value="{$_GET['id']}" />
+                        <input type="submit" value="保存" class="btn btn-primary">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-title">客户编号</td>
+                    <td><input type="text"  id="CustNo" name="CustNo" value="{$d['custno']}" /></td>
+
+
+                </tr>
+
+                <tr>
+                    <td class="td-title">客户手机</td>
+                    <td><input type="text" name="Mobile"  id="Mobile" value="{$d['mobile']}" /></td>
+
+                </tr>
+                <tr>
+                    <td class="td-title">QQ号</td>
+                    <td><input type="text" name="QQ" id="QQ" value="{$d['qq']}"/></td>
+
+                </tr>
+
+                <tr>
+                    <td class="td-title">备注</td>
+                    <td rowspan="3">
+                        <textarea name="Remark" id="Remark" rows="10" class="w-percent-100">{$d['remark']}</textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>

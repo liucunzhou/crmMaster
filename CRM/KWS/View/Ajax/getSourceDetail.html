@@ -1,0 +1,31 @@
+<select name="Platform" id="Platform" class="w-percent-30 selectpicker"  multiple="false">
+    <option value="0">请选择平台</option>
+    <foreach item="v" name="platForm">
+        <option value="{$v}" <if condition="$v eq $sources[$sourceFrom]['platform']">selected</if>>{$v}</option>
+    </foreach>
+</select>
+<select name="SourceFrom" id="SourceFrom" class="w-percent-50 selectpicker">
+    <option value="0">请选择来源</option>
+    <foreach item="v" name="sources">
+        <option <if condition="$sourceFrom eq $v['sourceid']">selected</if> value="{$v['sourceid']}">{$v['sourcename']}</option>
+    </foreach>
+</select>
+
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-selectradio.js"></script>
+<script>
+    $(function () {
+        $("#Platform").multipleSelect({
+            filter: true,
+            width: '80%',
+            placeholder: '请选择平台',
+            single: true
+        });
+        $("#SourceFrom").multipleSelect({
+            filter: true,
+            width: '80%',
+            placeholder: '请选择来源',
+            single: true
+        });
+    });
+</script>

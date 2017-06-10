@@ -1,0 +1,361 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售管理</li>
+                <li>客户信息</li>
+            </ul>
+        </div>
+
+        <div class="">
+            <select id="Sellers" class="pull-left w-percent-10">
+                <option value="-1">请选择</option>
+                <foreach item="v" name="ksellers">
+                    <option value="{$v['userid']}"
+                    <if condition="$_GET['salseId'] eq $v">selected</if>
+                    >{$v['realname']}</option>
+                </foreach>
+            </select>
+            <a class="btn btn-primary" href="javascript:void(0)" id="reassign">分配</a>
+        </div>
+        <div class="space-10"></div>
+        <!-- 检索表单 -->
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <input type="hidden" name="sf" value="yes"/>
+            <table class="tabele table-bordered table-search">
+                <tr>
+                    <td class="w-percent-12">
+                        <select name="StoreId[]" id="StoreId">
+                            <option value="0">--请选择门店--</option>
+                            <foreach item="v" name="kstores">
+                                <option value="{$v['storeid']}" <if condition="in_array($v['storeid'], $_GET['StoreId'])">selected</if>>{$brands[$v['brandid']]['brandname']}{$v['storename']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-12">
+                        <input type="text" name="CustName" id="CustName" value="{$Think.get.CustName}" placeholder="客户资料"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <select name="Opeartor[]" id="Opeartor">
+                            <option value="-1">邀约推广</option>
+                            <foreach item="v" name="promoters">
+                                <option value="{$v['userid']}" <if condition="in_array($v['userid'], $_GET['Opeartor'])">selected</if>>{$v['realname']}</option>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-8">
+                        <select name="SourceFrom[]" id="SourceFrom">
+                            <option value="0">客资来源</option>
+                            <foreach item="val" name="gsources">
+                                <optgroup label="{$key}">
+                                    <foreach item="v" name="val">
+                                        <option value="{$v['sourceid']}" <if condition="in_array($v['sourceid'],$_GET['SourceFrom'])">selected</if>>{$v['sourcename']}</option>
+                                    </foreach>
+                                </optgroup>
+                            </foreach>
+                        </select>
+                    </td>
+                    <td class="w-percent-8"></td>
+                    <td class="w-percent-8">
+                        <select name="AssignStatus" id="AssignStatus">
+                            <option value="-1">--接单状态--</option>
+                            <option value="1" <if condition="$_GET['AssignStatus'] eq '1'">selected</if>>已接受</option>
+                            <option value="0" <if condition="$_GET['AssignStatus'] eq '0'">selected</if>>未接受</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-5">
+                        <if condition="in_array($user['roleid'], [3,4,5,6,7,8,12])">
+                            <select name="salseId[]" id="salseId">
+                                <option value="-1">接单客服</option>
+                                <foreach item="v" name="ksellers">
+                                    <option value="{$v['userid']}" <if condition="in_array($v['userid'],$_GET['salseId'])">selected</if>>{$v['realname']}</option>
+                                </foreach>
+                            </select>
+                        </if>
+                    </td>
+                    <td class="w-percent-10">
+                        <select name="Status[]" id="Status">
+                            <option value="-1">回访状态</option>
+                            <foreach item="val" name="status">
+                                <option value="{$key}" <if condition="in_array($key,$_GET['Status'])">selected</if>>{$val}</option>
+                            </foreach>
+                            <option value="0">未回访</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="StartInsertTime" id="StartInsertTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.StartInsertTime">{$Think.get.StartInsertTime}</notempty>" placeholder="录入开始时间"/>
+                        <input type="text" name="EndInsertTime" id="EndInsertTime" class="Wdate border-top" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.EndInsertTime">{$Think.get.EndInsertTime}</notempty>" placeholder="录入结束时间"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <select name="IsOrder" id="IsOrder">
+                            <option value="-1">是否订单</option>
+                            <option value="1" <if condition="$_GET['IsOrder'] eq '1'">selected</if>>是</option>
+                            <option value="0" <if condition="$_GET['IsOrder'] eq '0'">selected</if>>否</option>
+                        </select>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="submit" class="w-percent-100 btn btn-system" value="搜索"/>
+                    </td>
+                </tr>
+            </table>
+        </form> <!-- 检索表单 -->
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="text-left w-percent-12"><input type="checkbox" id="checkAll"> 咨询门店</td>
+                <td class="text-left w-percent-12">客户信息</td>
+                <td class="w-percent-5">推广</td>
+                <td class="w-percent-8">客资来源</td>
+                <td class="w-percent-8">录入时间</td>
+                <td class="text-left w-percent-8">接受状态</td>
+                <td class="w-percent-5">客服</td>
+                <td class="w-percent-10">回访状态</td>
+                <td class="text-left w-percent-10">回访信息</td>
+                <td class="w-percent-5">订单</td>
+                <td class="text-left w-percent-5">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr class="<if condition=" $val[
+                'isrepeat'] eq '1'">color-red</if>
+                <notempty name="val['color']">status-color</notempty>
+                "
+                <notempty name="val['color']">style="background-color:{$val['color']};"</notempty>
+                >
+                <td class="text-left">
+                    <input type="checkbox" name="CustId" value="{$val['custid']}"
+                           class="customer-item"/>
+                    <ul>
+                        <li>
+                            {$brands[$stores[$val['storeid']]['brandid']]['brandname']}{$stores[$val['storeid']]['storename']}
+                        </li>
+                        <!--<li>{$stores[$val['storeid']]['business']}</li>-->
+                    </ul>
+                </td>
+                <td class="text-left">
+
+                    <ul>
+                        <li>
+                            {$val['custname']}&nbsp;
+                            <span class="hidden"><php>$remark=D('Visit')->getVisitRemark($val['custid']);</php></span>
+                            <empty name="remark">
+                                <notempty name="val['remark']">
+                                    <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip"
+                                          data-placement="top" title="{$val['remark']}"></span>
+                                </notempty>
+                                <else/>
+                                <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip"
+                                      data-placement="top" title="{$remark}"></span>
+                            </empty>
+                        </li>
+                        <notempty name="val[mobile]">
+                            <li>
+                                <span class="ctitle">手机:</span>
+                                <span class="cvalue">{$val['mobile']}</span>
+                            </li>
+                            </notempty>
+                        <notempty name="val[wechat]">
+                            <li>
+                                <span class="ctitle">微信:</span>
+                                <span class="cvalue">{$val['wechat']}</span>
+                            </li>
+                        </notempty>
+                        <notempty name="val[qq]">
+                            <li>
+                                <span class="ctitle">QQ:</span>
+                                <span class="cvalue">{$val['qq']}</span>
+                            </li>
+                        </notempty>
+                        <notempty name="val['weiboname']">
+                            <li>
+                                <span class="ctitle">微博:</span>
+                                <span class="cvalue">{$val['weiboname']}</span>
+                            </li>
+                        </notempty>
+                    </ul>
+                    </td>
+                <!-- 邀约手 -->
+                <td>{:D('User')->getUser($val['opeartor'], 'realname')}</td>
+                    <td>
+                        {$sources[$val['sourcefrom']]['sourcename']}
+                    </td>
+                    <td>
+                        <php>
+                            $time = explode(' ', $val['inserttime']);
+                        </php>
+                        <ul>
+                            <li>{$time[0]}</li>
+                            <li>{$time[1]}</li>
+                        </ul>
+                    </td>
+                <!-- 接单销售客服 -->
+                    <td>
+                        <span class="accpet-status">{:D('Assign')->getFieldInfo($val['custno'] ,'status')}</span>
+                    </td>
+                    <td>
+                        {:D('Assign')->getAssigndata( $val['custno'], 'nowuser')}
+                        <php>$isLock = D('User')->getUser($val['salseid'], 'islock');</php>
+                        <if condition="$isLock eq '1'">
+                            <span class="glyphicon glyphicon-lock" title="已离职员工"></span>
+                        </if>
+                        <if condition="$val['iswashing'] eq 1">
+                            <span class="glyphicon glyphicon-refresh" title="洗单"></span>
+                            <elseif condition="$val['iswashing'] eq 2"/>
+                            <span class="glyphicon glyphicon-repeat" title="已洗单"></span>
+                            </elseif>
+                        </if>
+                    </td>
+                    <td>
+                        <div
+                        <empty name="val['status']">class="weihuifang-color"</empty>
+                        <if condition="$val['status'] eq 25">class="weiyanzheng-color"</if>
+                        >
+                        <a href="javascript:void(0)" class="action-layer"
+                           data-action="{:U('Seller/addVisit',array('id'=>$val['custid']))}" layer-title="编辑回访信息"
+                           layer-width="1000px" layer-height="500px">
+                            {$status[$val['status']]?$status[$val['status']]:'未回访'}
+                        </a>
+    </div>
+    </td>
+    <td class="text-left">
+        已回访{:D('Customer')->getVisitTimes($val['custno'])}次
+        <php>
+            $time = explode(' ', $val['lastvisittime']);
+        </php>
+        <ul>
+            <li>最后回访时间:</li>
+            <li>{$time[0]}</li>
+            <li>{$time[1]}</li>
+        </ul>
+    </td>
+    <td>{$val['isorder'] == '1'?'是':'否'}</td>
+    <td class="text-left">
+        <!--<ul>
+            <li class="{:check_rule($RulesBlack, 'Seller/changeSeller')}"><a href="javascript:void(0)"
+                                                                             class="action-layer"
+                                                                             data-action="{:U('Seller/changeSeller',array('id'=>$val['custid']))}"
+                                                                             layer-title="修改客服" layer-width="360px"
+                                                                             layer-height="240px">[修改客服]</a></li>
+            <li class="{:check_rule($RulesBlack, 'Seller/delCust')}"><a href="javascript:void(0)" class="action-delete"
+                                                                        data-action="{:U('Seller/delCust',array('id'=>$val['custid']))}"
+                                                                        data-tip="{$val.custname}">[删除]</a></li>
+        </ul>-->
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+{:D('Assign')->getFieldInfo()}
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/daterange/daterangepicker.css"/>
+<script src="/assets/plug-in/daterange/moment.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/plug-in/multiple-select/multiple-select.css">
+<script src="/assets/plug-in/multiple-select/multiple-select.js"></script>
+<script src="/assets/plug-in/daterange/daterangepicker.js"></script>
+<script>
+    $(function () {
+        $('#InsertTime').daterangepicker({
+            "startDate": "{:date('Y/m/d')}",
+            "endDate": "{:date('Y/m/d')}",
+            "showDropdowns": true,
+            "locale": {
+                "format": 'YYYY/MM/DD'
+            },
+            "dateLimit": {
+                "months": 12
+            },
+            "linkedCalendars": false
+        });
+        $('#LastVisitTime').daterangepicker({
+            "startDate": "{:date('Y/m/d')}",
+            "endDate": "{:date('Y/m/d')}",
+            "showDropdowns": true,
+            "locale": {
+                "format": 'YYYY/MM/DD'
+            },
+            "dateLimit": {
+                "months": 12
+            },
+            "linkedCalendars": false
+        });
+
+        $("#StoreId").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择门店'
+        });
+
+        $("#Opeartor").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择邀约手'
+        });
+
+        $("#SourceFrom").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择来源'
+        });
+
+
+        $("#salseId").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择接单客服'
+        });
+
+        $("#Status").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择回访状态'
+        });
+        $("#Sellers").multipleSelect({
+            filter: true,
+            width: '100%',
+            placeholder: '选择回访状态',
+            single:true,
+        });
+    })
+</script>
+<script>
+    $(function () {
+        $('#checkAll').click(function () {
+            $("input.customer-item").prop("checked", $(this).prop("checked"));
+        });
+    });
+
+    $("#reassign").click(function () {
+        var seller = $("#Sellers").val();
+        if (seller == '-1') {
+            layer.msg('请选择要分配的销售');
+            return false;
+        }
+
+        var ids = '';
+        $("input.customer-item:checked").each(function (i, n) {
+            if (i == 0) {
+                ids = $(n).val();
+            } else {
+                ids = ids + ',' + $(n).val();
+            }
+        });
+        if (ids == '') {
+            layer.msg('请选择要分配的客咨');
+            return false;
+        }
+        var url = "{:U('Assign/doEditDimission')}";
+        $.post(url, {ids: ids, seller: seller}, function (data) {
+
+            alert(data.msg);
+            window.location.reload();
+        });
+    });
+
+
+</script>

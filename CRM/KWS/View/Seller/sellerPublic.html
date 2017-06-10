@@ -1,0 +1,106 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售回访</li>
+                <li>公共池</li>
+
+            </ul>
+            <include file="Public:goback" />
+        </div>
+        <div class="clearfix form-header">
+            <span>
+                显示内容：
+                <input type="checkbox" value="1" />序号
+                <input type="checkbox" value="2" />客户姓名
+                <input type="checkbox" value="3" />咨询门店
+                <input type="checkbox" value="4" />手机号
+                <input type="checkbox" value="5" />微信号
+                <input type="checkbox" value="6" />微博昵称
+                <input type="checkbox" value="7" />QQ号
+                <input type="checkbox" value="8" />QQ验证
+                <input type="checkbox" value="9" />接受状态
+                <input type="checkbox" value="10" />回访状态
+                <input type="checkbox" value="11" />订单
+                <input type="checkbox" value="12" />备注
+                <input type="checkbox" value="13" />录入时间
+                <input type="checkbox" value="14" />来源
+                <input type="checkbox" value="15" />邀约手
+                <input type="checkbox" value="16" />接单销售
+            </span>
+            <p>
+            <span>
+
+                客户单号:<input type="text" value="" />
+                客户姓名:<input type="text" value="" />
+                联系方式：<input type="text" value="" />
+
+
+                录入日期：<input type="text" value="" />~<input type="text" value="" />
+                <input type="submit" value="搜索" />
+                <button>导出</button>
+            </span>
+            </p>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Index/editBrand')}">
+            <table class="table table-hover">
+                <tr>
+                    <td>序号</td>
+                    <td>客户姓名</td>
+                    <td>咨询门店</td>
+                    <td>手机号</td>
+                    <td>微信号</td>
+                    <td>微博昵称</td>
+                    <td>QQ号</td>
+                    <td>QQ验证</td>
+                    <td>接受状态</td>
+                    <td>回访接受</td>
+                    <td>订单</td>
+                    <td>备注</td>
+                    <td>录入时间</td>
+                    <td>来源</td>
+                    <td>邀约手</td>
+                    <td>接单销售</td>
+                    <td>操作</td>
+
+
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td>客户姓名</td>
+                    <td>咨询门店</td>
+                    <td>手机号</td>
+                    <td>微信号</td>
+                    <td>微博昵称</td>
+                    <td>QQ号</td>
+                    <td>QQ验证</td>
+                    <td>接受状态</td>
+                    <td>回访接受</td>
+                    <td>订单</td>
+                    <td>备注</td>
+                    <td>录入时间</td>
+                    <td>来源</td>
+                    <td>邀约手</td>
+                    <td>接单销售</td>
+                    <td>
+                        <a>洗单</a>
+                        <a>日志</a>
+                    </td>
+
+                </tr>
+
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

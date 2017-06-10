@@ -1,0 +1,258 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <!-- 表单 -->
+        <div class="space-10"></div>
+
+        <table class="table table-responsive table-striped table-bordered table-hover" >
+            <tr>
+                <td>姓名</td>
+                <td>订单类型</td>
+                <td>订单号</td>
+                <td>门店</td>
+                <td>城市品牌</td>
+            </tr>
+            <tr>
+                <td>{$customer['custname']}</td>
+                <td>订单类型</td>
+                <td>订单号</td>
+                <td>门店</td>
+                <td>城市品牌</td>
+            </tr>
+        </table>
+
+        <!--
+        <table class="table table-responsive table-striped table-bordered table-hover" >
+            <tr>
+                <td class="text-center w-percent-10">姓名</td>
+                <td class="text-center w-percent-10">手机</td>
+                <td class="text-center w-percent-10">QQ</td>
+                <td class="text-center w-percent-10">微信</td>
+                <td class="text-center w-percent-10">微博昵称</td>
+                <td class="text-center w-percent-10">所属门店</td>
+                <td class="text-center w-percent-10">接单销售</td>
+            </tr>
+            <tr>
+                <td class="text-center">{$customer['custname']}</td>
+                <td class="text-center">{$d['mobile']}</td>
+                <td class="text-center">{$customer['qq']}</td>
+                <td class="text-center">{$customer['wechat']}</td>
+                <td class="text-center">{$customer['weiboname']}</td>
+                <td class="text-center">{:D('store')->getStore($customer['storeid'],'storename')}</td>
+                <td class="text-center">{:D('user')->getUser($d['add_user'],'realname')}</td>
+            </tr>
+        </table>
+        -->
+
+        <!-- 订单基本信息 -->
+        <!--
+        <table class="table table-responsive table-striped table-bordered" id="table-order-base">
+            <tr>
+                <td class="td-title w-percent-10">门店</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" id="StoreId" value="{$brand[$kstores[$d['storeid']]['brandid']]['brandname']}{$kstores[$d['storeid']]['storename']}">
+                </td>
+                <td class="td-title w-percent-10">城市品牌</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="Company" value="{$customer['company']}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-title color-red w-percent-10">订单类型</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" id="customerType" value="<switch name="d['customertype']">
+                    <case value="0">未选择</case>
+                    <case value="1">网单</case>
+                    <case value="2">自然进店</case>
+                    <case value="3">邀约进店</case>
+                    <case value="4">退款</case>
+                    <case value="5">电话订单</case>
+                    <default />异常订单类型
+                    </switch>" readonly/>
+                </td>
+                <td class="td-title w-percent-10">订单编号</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="OrderNo" value="{$d.orderno}">
+                </td>
+            </tr>
+            <tr>
+                <td class="td-title w-percent-10">手机号码</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="Mobile" value="{$d['mobile']}">
+                </td>
+                <td class="td-title w-percent-10">客户姓名</td>
+                <td class="text-left w-percent-40">
+                    <input type="text" name="CustName" value="{$customer['custname']}">
+                </td>
+            </tr>
+        </table>
+        -->
+
+        <form class="form form-edit-order form-layer" data-action="{:U('Order/doEditOrder')}">
+            <!-- 订单支付信息 -->
+            <table class="table table-responsive table-striped table-bordered" id="table-order-pay">
+                <tr>
+                    <td class="td-title w-percent-10 color-red">支付类型</td>
+                    <td class="text-left w-percent-40">
+                        <select class="doubleselect" name="OrderType" id="OrderType">
+                            <option value="0">请选择</option>
+                            <option value="1">全款</option>
+                            <option value="2">首付</option>
+                            <option value="3">尾款</option>
+                            <option value="4">定金</option>
+                        </select>
+                        <select  class="doubleselect" name="OrderPay" >
+                            <option value="0">请选择</option>
+                            <option value="1" <if condition="$d['orderpay'] eq 1">selected</if>>天猫</option>
+                            <option value="2" <if condition="$d['orderpay'] eq 2">selected</if>>支付宝</option>
+                            <option value="3" <if condition="$d['orderpay'] eq 3">selected</if>>银行卡</option>
+                            <option value="4" <if condition="$d['orderpay'] eq 4">selected</if>>现金</option>
+                            <option value="5" <if condition="$d['orderpay'] eq 5">selected</if>>大众点评闪惠</option>
+                            <option value="6" <if condition="$d['orderpay'] eq 6">selected</if>>pos机刷卡</option>
+                            <option value="7" <if condition="$d['orderpay'] eq 7">selected</if>>团购</option>
+                        </select>
+                    </td>
+                    <td class="td-title w-percent-10">支付账号</td>
+                    <td class="text-left w-percent-40"><input type="text" name="OrderAccount" value="{$d['orderaccount']}"></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">套系金额</td>
+                    <td class="text-left w-percent-40"><input type="text" name="Money" id="Money" value="{$d['money']}"></td>
+                    <td class="td-title w-percent-10 color-red">付款金额</td>
+                    <td class="text-left w-percent-40"><input type="text" name="PayMoney" id="PayMoney"></td>
+                </tr>
+                <tr>
+                    <td class="td-title w-percent-10 color-red">订单时间</td>
+                    <td class="text-left w-percent-40">
+                        <input type="text" name="OrderTime" id="OrderTime" class="Wdate" placeholder="点击输入日期" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                    </td>
+                    <td class="td-title w-percent-10">备注</td>
+                    <td class="text-left w-percent-40">
+                        <textarea name="Remarks">{$d['remarks']}</textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="HasPay" id="HasPay" value="0"/>
+                <input type="hidden" name="layer" value="yes"/>
+                <input type="hidden" name="OrderId" value="{$d['orderid']}" />
+                <input type="hidden" name="CustId" id="custid" value="{$d['custid']}" />
+            </div>
+        </form>
+    </div>
+    <div class="clearfix">
+        <h3 class="pull-left">支付记录</h3>
+        <div class="pull-right">
+            <div class="btn btn-system" id="btn-edit-order">支付</div>
+        </div>
+    </div>
+    <div class="space-10"></div>
+    <table class="table table-responsive table-striped table-bordered table-hover">
+        <tr>
+            <td>支付类型</td>
+            <td>支付金额</td>
+            <td class="w-percent-10">录入时间</td>
+            <td class="w-percent-10">订单时间</td>
+            <td>销售客服</td>
+            <td>订单添加人</td>
+            <td>操作</td>
+        </tr>
+        <foreach name="log" item="val">
+            <tr>
+                <td>
+                    <switch name="val['ordertype']">
+                        <case value="1">全款</case>
+                        <case value="2">首款</case>
+                        <case value="3">尾款</case>
+                        <case value="4">定金</case>
+                    </switch>
+                </td>
+                <td>{$val['paymoney']}</td>
+                <td>{$val['inserttime']}</td>
+                <td>{$val['ordertime']}</td>
+                <td>{:D('user')->getUser($customer['salseid'],'realname')}</td>
+                <td>{:D('user')->getUser($val['adduser'],'realname')}</td>
+                <td>
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                </td>
+            </tr>
+        </foreach>
+    </table>
+
+</div>
+<script>
+$(function () {
+    $("#OrderType").change(function(){
+        $("#PayMoney").val('');
+        $("#OrderTime").val('');
+    });
+
+    $("#toggle-order-pay").click(function(){
+
+        $("#table-order-pay").toggleClass("hide");
+        if($("#table-order-pay").hasClass("hide")){
+            $("#HasPay").val(0);
+            $(this).html("显示支付");
+        } else {
+            $("#HasPay").val(1);
+            $(this).html("移除支付");
+        }
+
+    });
+
+    //提交表单
+    $("#btn-edit-order").click(function () {
+        var $this = $(".form-edit-order"),
+            url = $this.attr('data-action'),
+            custid = $('#custid').val(),
+            Money = $('#Money').val(),
+            PayMoney = $('#PayMoney').val(),
+            OrderTime = $('#OrderTime').val(),
+            CustomerType = $("#CustomerType").val(),
+            OrderType = $("#OrderType").val(),
+            HasPay = $("#HasPay").val();
+
+        if(HasPay == '1') {
+            if (OrderType == '0') {
+                layer.msg('支付类型');
+                return false;
+            }
+
+            if (!Money) {
+                layer.msg('套系金额不能为空');
+                return false;
+            }
+
+            if (!PayMoney) {
+                layer.msg('付款金额不能为空');
+                return false;
+            }
+
+            if (OrderType == '1' && Money != PayMoney) {
+                layer.msg('支付金额需要与套系金额一致');
+                return false;
+            }
+
+            if (!OrderTime || OrderTime == '0000-00-00 00:00:00') {
+                layer.msg('订单时间不能为空');
+                return false;
+            }
+        }
+
+        $.post(url, $this.serialize(), function (data) {
+            if (data.redirect != undefined) {
+                window.location.href = data.redirect;
+            } else if (data.layer == 'yes') {
+                parent.window.location.reload();
+            } else if (data.reload == 'yes') {
+                window.location.reload();
+            } else {
+                alert(data.msg);
+                $('.change-verify').trigger("click");
+                $this.find('input[name="' + data.id + '"]').siblings(".error-tip").html(data.msg).show();
+            }
+
+        }, 'json');
+    });
+});
+</script>

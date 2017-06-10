@@ -1,0 +1,31 @@
+<div class="padding-12lr">
+
+    <div>
+        <a href="javascript:void(0);" class="btn btn-default btn-play">播放提示音</a>
+    </div>
+
+    <table class="table table-bordered">
+        <foreach item="val" name="list">
+            <tr>
+                <td>{$val['newid']}</td>
+                <td>{$val['kid']}</td>
+                <td>{$val['arole']}</td>
+                <td>{$val['nua']}</td>
+                <td>{$val['brole']}</td>
+                <td>{$val['nub']}</td>
+            </tr>
+        </foreach>
+    </table>
+</div>
+<script>
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', '/assets/js/ding.mp3');
+
+    audioElement.addEventListener("load", function () {
+        audioElement.play();
+    }, true);
+
+    $(".btn-play").click(function(){
+        audioElement.play();
+    });
+</script>

@@ -1,0 +1,101 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>销售回访</li>
+                <li>订单管理</li>
+
+            </ul>
+            <include file="Public:goback" />
+        </div>
+        <div class="clearfix form-header">
+
+            <span>
+
+                订单编号:<input type="text" value="" />
+                客户姓名:<input type="text" value="" />
+                销售组别<select>
+                            <option>全部</option>
+                        </select>
+                来源：<select>
+                        <option>请选择</option>
+                        </select>
+                联系电话：<input type="text" value="" />
+                订单日期：<input type="text" value="" />~<input type="text" value="" />
+                <input type="submit" value="搜索" />
+                <button>导出</button>
+
+            </span>
+        <p><span>
+            <input type="checkbox" value="1">全款
+            <input type="checkbox" value="2">首付
+            <input type="checkbox" value="3">尾款
+            <input type="checkbox" value="4">定金
+        </span></p>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Index/editBrand')}">
+            <table class="table table-hover">
+                <tr>
+                    <td>序号</td>
+                    <td>城市品牌</td>
+                    <td>客户姓名</td>
+                    <td>咨询门店</td>
+                    <td>手机号</td>
+                    <td>微信号</td>
+                    <td>微博昵称</td>
+                    <td>QQ号</td>
+                    <td>订单金额</td>
+                    <td>已付金额</td>
+                    <td>付款类别</td>
+                    <td>订单类别</td>
+                    <td>订单时间</td>
+                    <td>来源</td>
+                    <td>邀约手</td>
+                    <td>接单销售</td>
+                    <td>订单添加人</td>
+                    <td>关键字</td>
+                    <td>操作</td>
+
+
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td>城市品牌</td>
+                    <td>客户姓名</td>
+                    <td>咨询门店</td>
+                    <td>手机号</td>
+                    <td>微信号</td>
+                    <td>微博昵称</td>
+                    <td>QQ号</td>
+                    <td>订单金额</td>
+                    <td>已付金额</td>
+                    <td>付款类别</td>
+                    <td>订单类别</td>
+                    <td>订单时间</td>
+                    <td>来源</td>
+                    <td>邀约手</td>
+                    <td>接单销售</td>
+                    <td>订单添加人</td>
+                    <td>关键字</td>
+                    <td>
+                        <a>编辑</a>
+                        <a>删除</a>
+                    </td>
+
+                </tr>
+
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

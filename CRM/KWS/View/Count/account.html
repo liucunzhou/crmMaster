@@ -1,0 +1,231 @@
+<div class="page-main-content">
+    <include file="Common/search"/>
+    <div class="main-content <notempty name='Think.get.search'>show_page_search</notempty>">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>数据统计</li>
+                <li>部门统计</li>
+                <li>部门台账</li>
+            </ul>
+            <include file="Common:back"/>
+        </div>
+        <div class="space-10"></div>
+        <form class="search-advance" method="get" action="__SELF__">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <table class="table table-responsive table-bordered table-hover table-search-items">
+                <tr>
+                    <td class="text-left w-percent-10">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        部门
+                    </td>
+                    <td class="text-left">
+                        <div class="search-items">
+                            <foreach item="v" name="allDepart">
+                                <label><input type="checkbox" name="DepartId[]" value="{$key}">{$v}</label>
+                            </foreach>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left w-percent-10">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        门店
+                    </td>
+                    <td class="text-left">
+                        <div class="search-items">
+                            <foreach item="v" name="store">
+                                <label>
+                                    <input type="checkbox" name="StoreId[]" value="{$v['storeid']}" >
+                                    {$brand[$v['brandid']]['brandname']}{$v['storename']}
+                                </label>
+                            </foreach>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left w-percent-10">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        接单状态
+                    </td>
+                    <td class="text-left">
+                        <div class="search-items">
+                            <label> <input type="radio" name="IsOrder" value="1">是</label>
+                            <label><input type="radio" name="IsOrder" value="0">否</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left w-percent-10">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        回访状态
+                    </td>
+                    <td class="text-left">
+                        <div class="search-items">
+                            <foreach item="v" name="status">
+                                <label>
+                                    <input type="checkbox" name="status[]" value="{$key}"/> {$v}
+                                </label>&nbsp;
+                            </foreach>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left w-percent-10">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        销售来源
+                    </td>
+                    <td class="text-left">
+                        <div class="search-items">
+                            <foreach item="v" name="source">
+                                <label>
+                                    <input type="checkbox" name="source[]" value="{$key}"/>
+                                    {$v}
+                                </label>
+                            </foreach>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        接单销售
+                    </td>
+                    <td class="text-left">
+                        <input type="text"   name="seller"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-left">
+                        <span class="glyphicon glyphicon-play"></span>&nbsp;
+                        录入时间
+                    </td>
+                    <td class="text-left">
+                        <input type="text" name="InsertStart" placeholder="录入开始时间"  class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" />
+                        <span class="delimiter">至</span>
+                        <input type="text" name="InsertEnd" placeholder="录入结束时间"  class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="" />
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="toolbox clearfix">
+            <a class="btn btn-primary {:check_rule($RulesBlack, 'expAccount')}" href="{:U('expAccount',$_GET)}"><span class="glyphicon glyphicon-plus"></span>&nbsp;导出台账</a>
+            <form class="pull-right" method="get" action="__SELF__">
+                <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}" />
+                <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+
+                <input type="text" name="InsertStart" value="" placeholder="录入开始时间" class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                至
+                <input type="text" name="InsertEnd" value="" placeholder="录入结束时间"  class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+
+
+        </div>
+
+
+        <div class="space-10"></div>
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td align="center">
+                    <select name="StoreId" class="s-storeid-select">
+                        <option value="">请选择</option>
+                        <foreach item="v" name="kstores">
+                            <option value="{$v['storeid']}">{$brand[$v['brandid']]['brandname']}{$v['storename']}</option>
+                        </foreach>
+                    </select>
+                </td>
+                <td align="center"><!--<input type="text" name="CustNo" class="s-custno-input">--></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"><input type="text" name="CustName" class="s-custname-input"></td>
+                <td align="center"><input type="text" name="Mobile" class="s-mobile-input"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center">
+                    <select name="DepartId" class="s-status-select">
+                        <option value="0">请选择</option>
+                        <foreach item="v" name="departments">
+                            <option  value="{$key}">{$v}</option>
+                        </foreach>
+                    </select>
+                </td>
+                <td align="center"><input type="text" name="seller" class="s-seller-input"></td>
+                <td align="center">
+                    <select name="SourceFrom" class="s-sourcefrom-select">
+                        <option value="0">请选择</option>
+                        <foreach item="v" name="source">
+                            <option value="{$key}">{$v}</option>
+                        </foreach>
+                    </select>
+                </td>
+                <td align="center">
+
+                </td>
+                <td align="center">付款方式</td>
+                <td align="center"><input type="submit" class="btn btn-primary s-submit-input" value="搜索" /></td>
+            </tr>
+            </form>
+            <tr class="table-header">
+                <td align="center">门店</td>
+                <td align="center">订单号</td>
+                <td align="center">套系</td>
+                <td align="center">实收</td>
+                <td align="center">姓名</td>
+                <td align="center">联系电话</td>
+                <td align="center">团队</td>
+                <td align="center">组别</td>
+                <td align="center">主管</td>
+                <td align="center">电商客服</td>
+                <td align="center">微博粉丝通</td>
+                <td align="center">订单方式</td>
+                <td align="center">付款方式</td>
+                <td align="center">备注</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td align="center">{$brand[$store[$val['storeid']]['brandid']]['brandname']} {$store[$val['storeid']]['storename']}</td>
+                    <td align="center">{$val['orderno']}</td>
+                    <td align="center">{$val['money']}</td>
+                    <td align="center">{$val['paymoney']}</td>
+                    <td align="center">{$val['custname']}</td>
+                    <td align="center">{$val['mobile']}</td>
+                    <td align="center">{$val['manage']}</td>
+                    <td align="center">{$val['sellerManage']}</td>
+                    <td align="center">{$val['seller']}</td>
+                    <td align="center">{:D('User')->getUser($val['salseid'],'realname')}</td>
+                    <td align="center">{$source[$val['sourcefrom']]}</td>
+                    <td align="center">
+                        <switch name="val.ordertype">
+                            <case value="1">全款</case>
+                            <case value="2">首付</case>
+                            <case value="3">尾款</case>
+                            <case value="4">定金</case>
+                        </switch>
+                    </td>
+                    <td align="center">
+                        <switch name="val.orderpay">
+                            <case value="1">天猫</case>
+                            <case value="2">支付宝</case>
+                            <case value="3">银行卡</case>
+                            <case value="4">现金</case>
+                            <case value="5">大众点评闪汇</case>
+                            <case value="6">POS机刷卡</case>
+                            <case value="7">团购</case>
+                        </switch>
+
+                    </td>
+                    <td class="s-remark-width">
+
+                        {:D('Visit')->getVisitRemark($val['custid'])}
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>
+<script>
+
+</script>

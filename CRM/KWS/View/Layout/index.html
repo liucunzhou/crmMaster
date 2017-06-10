@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>嘉豪集团CRM管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/order.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/admin.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/jquery-ui/jquery-ui.css"/>
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/plug-in/jquery-ui/jquery-ui.js"></script>
+    <script src="/assets/js/jquery.validate.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-3.3.5-dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-3.3.5-dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-3.3.5-dist/css/font-awesome.min.css">
+    <script src="/assets/plug-in/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/plug-in/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <notempty name="Think.cookie.LeftSide">
+    <style>
+        .page-main .page-left {
+            display: none;
+        }
+        .page-main .page-right{
+            width: 100%;
+        }
+    </style>
+    </notempty>
+    <script src="/assets/plug-in/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/assets/plug-in/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="/assets/plug-in/layer/layer.js"></script>
+    <script src="/assets/admin/js/system.js"></script>
+    <script src="/assets/admin/js/appoint.js"></script>
+    <script language="javascript" type="text/javascript" src="/assets/admin/js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+<include file="Common/head"/>
+<div class="page-main">
+    <include file="Common/menu"/>
+    <div class="page-right">
+        {__CONTENT__}
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h4 class="modal-title" id="myModalLabel">邀约手推送的消息</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>-->
+                <button type="button" class="btn btn-primary accept_customer" id="accpet">接受</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var audioElement = document.createElement('audio');
+audioElement.setAttribute('src', '/assets/js/ding.mp3');
+audioElement.addEventListener("load", function () {
+    audioElement.play();
+}, true);
+
+$(function(){
+    $('.accept_customer').click(function(){
+        var url = '{:U("Seller/accpet")}',
+                AssignId = $(this).attr("data-assign"),
+                CustId = $(this).attr("data-custid");
+
+        var redirect = '{:U("Seller/index")}';
+
+        $.post(url, {AssignId:AssignId,CustId:CustId}, function(rs){
+            if(rs.code != '200') {
+                alert(rs.msg);
+                $('#myModal').modal('hide');
+            } else {
+                window.location.href = redirect;
+            }
+        })
+    });
+
+    // 离线设置
+    $(".offline").click(function(){
+        var url = $(this).attr('data-action');
+        $.get(url,function(data){
+           location.reload();
+        });
+    });
+
+    <if condition="in_array($user['roleid'], [1,2,3,4,5,9])">
+    // 检测是否在线
+   /* setInterval(function(){
+        var checkOnline = '{:U("User/checkOnline")}',
+                online = $(".status-online").attr("data-online");
+        $.get(checkOnline, {online:online});
+
+    }, 60000);*/
+
+    // 检测是否有新客资提示
+    setInterval(function(){
+        var url = '{:U("Seller/getMessage")}';
+
+        $.get(url, function(data) {
+            if (data.code == '100') {
+                $("#accpet").attr("data-custid", data.CustId);
+                $("#accpet").attr("data-assign", data.AssignId);
+                $("#myModal .modal-body").html("您有一条新的消息");
+                audioElement.play();
+                $('#myModal').modal('show');
+            }
+        });
+
+    }, 30000);
+    </if>
+
+    //超过30分钟自动退出网页
+    var maxTime= 60* 60;
+    var time = maxTime;
+    $('body').on('keydown mousemove mousedown',function(e){
+        time = maxTime;
+    });
+    var intervalId = setInterval(function(){
+        time--;
+        if(time <= 0){
+            ShowInvalidLoginMessage();
+            clearInterval(intervalId);
+        }
+    },1000);
+
+    function ShowInvalidLoginMessage(){
+        window.location="{:U('Public/logout')}";
+    }
+});
+</script>
+</body>
+</html>

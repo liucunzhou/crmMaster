@@ -1,0 +1,9 @@
+<foreach item="v" name="store">
+    <label class="label-checkbox">
+        <input type="checkbox" name="store[]" value="{$v['storeid']}" <if condition="in_array($v['storeid'],$_GET['store'])">checked</if>>
+        {$brands[$v['brandid']]['brandname']} {$v['storename']}
+    </label>
+</foreach>
+   <!-- <label class="label-checkbox">
+        <input type="checkbox" class="checkAll">全选
+    </label>-->

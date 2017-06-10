@@ -1,0 +1,85 @@
+<tr>
+    <td colspan="8" class="text-left"><h5>女装礼服</h5></td>
+</tr>
+<tr>
+    <td class="td-title">婚期状态</td>
+    <td class="text-left">
+        <select name="WedStatus" id="WedStatus">
+            <option <if condition="$d['wedstatus'] eq '-1'">selected</if> value="-1">--请选择--</option>
+            <option <if condition="$d['wedstatus'] eq '0'">selected</if> value="0">已定</option>
+            <option <if condition="$d['wedstatus'] eq '1'">selected</if> value="1">未定</option>
+            <option <if condition="$d['wedstatus'] eq '2'">selected</if> value="2">今年</option>
+            <option <if condition="$d['wedstatus'] eq '3'">selected</if> value="3">明年</option>
+            <option <if condition="$d['wedstatus'] eq '4'">selected</if> value="4">暂未确定</option>
+        </select>
+    </td>
+    <td class="td-title">是否进店</td>
+    <td class="text-left">
+        <select name="GotoStore" id="GotoStore">
+            <option value="0">请选择</option>
+            <option value="1" <if condition="$d['gotostore'] eq '1'">selected</if>>已预约</option>
+            <option value="2" <if condition="$d['gotostore'] eq '2'">selected</if>>已进店</option>
+            <option value="3" <if condition="$d['gotostore'] eq '3'">selected</if>>已改期</option>
+        </select>
+    </td>
+    <td class="td-title">预约时间</td>
+    <td class="text-left"><input type="text" name="PresetTime" id="PresetTime" value="{$d['presettime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+    <td class="td-title">进店时间</td>
+    <td class="text-left"><input type="text" name="IntoTime" id="IntoTime" value="{$d['intotime']}" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/></td>
+</tr>
+
+<tr>
+    <td class="td-title">新郎姓名</td>
+    <td class="text-left"><input type="text" name="Groom" id="Groom" value="{$d['groom']}"/></td>
+    <td class="td-title">新郎手机</td>
+    <td class="text-left"><input type="text" name="GroomMobi" id="GroomMobi" value="{$d['groommobi']}"/></td>
+    <td class="td-title">新娘姓名</td>
+    <td class="text-left"><input type="text" name="Bride" id="Bride" value="{$d['bride']}"/></td>
+    <td class="td-title">新娘手机</td>
+    <td class="text-left"><input type="text" name="BrideMobi" id="BrideMobi" value="{$d['bridemobi']}"/></td>
+</tr>
+<tr>
+    <td class="td-title">客户用途</td>
+    <td>
+        <select name="Usage" id="Usage">
+            <option value="0">--请选择--</option>
+            <option value="1" <if condition="$d['usage'] eq '1'">selected="selected"</if>>商务</option>
+            <option value="2" <if condition="$d['usage'] eq '2'">selected="selected"</if>>婚礼</option>
+            <option value="3" <if condition="$d['usage'] eq '3'">selected="selected"</if>>宴会</option>
+            <option value="4" <if condition="$d['usage'] eq '4'">selected="selected"</if>>生活休闲</option>
+        </select>
+    </td>
+    <td class="td-title">租赁/定制</td>
+    <td class="text-left">
+        <select name="IsRent" id="IsRent">
+            <option value="0">--请选择--</option>
+            <option value="1" <if condition="$d['isrent'] eq '1'">selected="selected"</if>>租赁</option>
+            <option value="2" <if condition="$d['isrent'] eq '2'">selected="selected"</if>>定制</option>
+        </select>
+    </td>
+    <td class="td-title">套数</td>
+    <td class="text-left">
+        <input type="text" name="Amount" id="Amount" value="{$d['amount']}" />
+    </td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td class="td-title">客户城市</td>
+    <td class="text-left">
+        <input type="text" name="City" id="City" value="{$d['city']}"/>
+    </td>
+    <td class="td-title">酒店预定</td>
+    <td class="text-left">
+        <select name="PreBookHotel" id="PreBookHotel">
+            <option value="-1">--请选择--</option>
+            <option value="0" <if condition="$d['usage'] eq '0'">selected="selected"</if>>否</option>
+            <option value="1" <if condition="$d['usage'] eq '1'">selected="selected"</if>>是</option>
+        </select>
+    </td>
+    <td class="td-title">备注</td>
+    <td class="text-left" colspan="2">
+        <textarea name="Remark" id="Remark" class="w-percent-100">{$d['remark']}</textarea>
+    </td>
+    <td colspan="1"></td>
+</tr>

@@ -1,0 +1,59 @@
+<div class="clearfix page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>财务审核</li>
+                <li>平台费用</li>
+
+            </ul>
+            <include file="Public:goback" />
+        </div>
+        <div class="clearfix form-header">
+            <p>
+                <span>
+                    日期：<input type="text" value="" />~<input type="text" value="" />
+                    <input type="submit" value="搜索" />
+                </span>
+            </p>
+        </div>
+        <!-- 表单 -->
+        <form class="ajax-form" data-action="{:U('Index/editBrand')}">
+            <table class="table table-hover">
+                <tr>
+                    <td>序号</td>
+                    <td>门店</td>
+                    <td>来源</td>
+                    <td>展现</td>
+                    <td>消费</td>
+                    <td>点击</td>
+                    <td>点击价格</td>
+                    <td>咨询</td>
+                    <td>咨询成本</td>
+                    <td>日期</td>
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td>门店</td>
+                    <td>来源</td>
+                    <td>展现</td>
+                    <td>消费</td>
+                    <td>点击</td>
+                    <td>点击价格</td>
+                    <td>咨询</td>
+                    <td>咨询成本</td>
+                    <td>日期</td>
+                </tr>
+            </table>
+            <div class="space-30"></div>
+            <div class="footer-fixed-bottom">
+                <input type="hidden" name="referer" value="{$_SERVER['HTTP_REFERER']}"/>
+                <input type="hidden" name="id" value="{$_GET['id']}" />
+                <input type="submit" value="保存" class="btn btn-system">
+                <a class="btn btn-info" href="javascript:history.go(-1)">返回</a>
+            </div>
+        </form>
+    </div>
+</div>

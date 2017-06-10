@@ -1,0 +1,29 @@
+<table class="table table-bordered">
+    <tr>
+        <td>客户编号</td>
+        <td>客户姓名</td>
+        <td>联系电话</td>
+        <td>大区编号</td>
+        <td>客服部门</td>
+        <td>客服编号</td>
+        <td>邀约部门</td>
+        <td>邀约编号</td>
+        <td>操作</td>
+    </tr>
+    <foreach item="val" name="list">
+        <tr>
+            <td>{$val['custid']}</td>
+            <td>{$val['custname']}</td>
+            <td>{$val['mobile']}</td>
+            <td>{$val['kid']}</td>
+            <td>{$val['departid']}</td>
+            <td>{$val['salseid']}</td>
+            <td>{$val['pdepartid']}</td>
+            <td>{$val['opeartor']}</td>
+            <td>
+                <a href="javascript:void(0)" data-action="{:U('Customer/correct', ['CustId'=>$val['custid']])}" class="correct">纠正</a>&nbsp;
+                <a href="">选择</a>
+            </td>
+        </tr>
+    </foreach>
+</table>

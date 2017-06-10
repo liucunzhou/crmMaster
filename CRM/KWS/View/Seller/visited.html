@@ -1,0 +1,93 @@
+<div class="clearfix page-main-content padding-12lr">
+    <div class="main-content">
+        <div class="space-10"></div>
+        <table  class="table table-responsive table-striped table-bordered table-hover">
+            <tr  class="table-header">
+                <td class='text-left w-percent-12'>咨询门店</td>
+                <td class="text-left w-percent-15">客户资料</td>
+                <td class="text-left w-percent-10">咨询业务</td>
+                <td class="text-center w-percent-10">回访时间</td>
+                <td class="text-center w-percent-10">回访状态</td>
+                <td class="text-center w-percent-10">是否订单</td>
+                <td class="text-left w-percent-15">备注</td>
+                <td class="text-center w-percent-8">操作</td>
+            </tr>
+            <foreach name="list" item="val">
+                <tr>
+                    <!-- 咨询门店 -->
+                    <td class="text-left">{$brands[$stores[$val['storeid']]['brandid']]['brandname']}{$stores[$val['storeid']]['storename']}</td>
+                    <!-- 客户资料 -->
+                    <td class="text-left">
+                        <ul>
+                            <li>
+                                {$val['custname']}&nbsp;
+                                <span class="hidden"><php>$remark=D('Visit')->getVisitRemark($val['custid']); </php></span>
+                                <empty name="remark">
+                                    <notempty name="val['remark']">
+                                        <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip" data-placement="top"  title="{$val['remark']}" ></span>
+                                    </notempty>
+                                    <else/>
+                                    <span class="remark glyphicon glyphicon-exclamation-sign" data-toggle="tooltip" data-placement="top"  title="{$remark}"></span>
+                                </empty>
+                            </li>
+                            <notempty name="val[mobile]">
+                                <li>
+                                    <span class="ctitle">手机:</span>
+                                    <span class="cvalue">{$val['mobile']}</span>
+                                </li>
+                            </notempty>
+                            <notempty name="val[wechat]">
+                                <li>
+                                    <span class="ctitle">微信:</span>
+                                    <span class="cvalue">{$val['wechat']}</span>
+                                </li>
+                            </notempty>
+                            <notempty name="val[qq]">
+                                <li>
+                                    <span class="ctitle">QQ:</span>
+                                    <span class="cvalue">{$val['qq']}</span>
+                                </li>
+                            </notempty>
+                            <notempty name="val['weiboname']">
+                                <li>
+                                    <span class="ctitle">微博:</span>
+                                    <span class="cvalue">{$val['weiboname']}</span>
+                                </li>
+                            </notempty>
+                        </ul>
+                    </td>
+                    <!-- 咨询业务 -->
+                    <td class="text-left">
+                        <ul>
+                            <li>是否拍摄:{$val['isphoto']?'是':'否'}</li>
+                            <li>是否婚宴:{$val['isfeast']?'是':'否'}</li>
+                        </ul>
+                    </td>
+                    <!-- 最后回访时间 -->
+                    <td class="text-center">
+                        <php>
+                            $time = explode(' ', $val['inserttime']);
+                        </php>
+                        <ul>
+                            <li>{$time[0]}</li>
+                            <li>{$time[1]}</li>
+                        </ul>
+                    </td>
+                    <!-- 回访状态 -->
+                    <td class="text-center">
+                        {$status[$val['status']]}
+                    </td>
+                    <!-- 是否订单 -->
+                    <td class="text-center">
+                        {$val['isorder']?'是':'否'}
+                    </td>
+                    <td class="text-left">{$val['remark']}</td>
+                    <td class="text-center">
+                        <a href="javascript:void(0)" class="action-delete" data-action="{:U('Seller/delVisited', ['id'=>$val['visitid']])}" data-tip="确定要删除{$val.custname}吗" >删除</a>
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>

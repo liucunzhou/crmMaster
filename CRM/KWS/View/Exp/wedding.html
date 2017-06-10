@@ -1,0 +1,87 @@
+<div class="page-main-content">
+    <div class="main-content">
+        <!-- 面包屑 -->
+        <div class="breadcrumb-box clearfix">
+            <ul class="breadcrumb">
+                <li>首页</li>
+                <li>客户管理</li>
+                <li>婚礼纪</li>
+            </ul>
+            <ul class="breadcrumb pull-right">
+
+                <li>
+                    <a href="{:U('Exp/expWedding',$_GET)}" title="导出">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="text">导出</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:history.go(-1);">
+                        <span class="glyphicon glyphicon-share-alt"></span>
+                        <span class="text">返回</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <form method="get" action="__SELF__" class="form-inline form-advance-search">
+            <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}"/>
+            <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}"/>
+            <table class="w-percent-100">
+                <tr>
+                    <td class="w-percent-10">
+                        <input type="text" name="Id" id="BrandId" value="{$_GET['Id']}" class="form-control" placeholder="编号"/>
+                    </td>
+                    <td class="w-percent-10">
+
+                    </td>
+                    <td class="w-percent-10">
+
+                    </td>
+                    <td class="w-percent-10">
+                        <input type="text" name="Province" id="Province" value="{$_GET['Province']}" class="form-control" placeholder="请输入省"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="text" name="City" id="City" value="{$_GET['City']}" class="form-control" placeholder="请输入市"/>
+                    </td>
+                    <td class="w-percent-5">
+                        <input type="text" name="StartInsertTime" id="StartInsertTime" class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.StartInsertTime">{$Think.get.StartInsertTime}</notempty>" placeholder="录入开始时间"/>
+                        <input type="text" name="EndInsertTime" id="EndInsertTime" class="Wdate border-top" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="<notempty name="Think.get.EndInsertTime">{$Think.get.EndInsertTime}</notempty>" placeholder="录入结束时间"/>
+                    </td>
+                    <td class="w-percent-10">
+                        <div class="w-percent-100 clearfix">
+                            <a href="javascript:void(0)" class="w-percent-100 pull-left btn btn-system btn-search">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <table class="table table-responsive table-striped table-bordered table-hover">
+            <tr class="table-header">
+                <td class="text-center w-percent-10">编号</td>
+                <td class="text-center w-percent-10">客户名</td>
+                <td class=" w-percent-10">手机号</td>
+                <td class=" w-percent-10">省</td>
+                <td class="text-center w-percent-5">市</td>
+                <td class="text-center w-percent-5">时间</td>
+                <td class="text-center w-percent-10">操作</td>
+            </tr>
+            <foreach item="val" name="list">
+                <tr>
+                    <td class="text-center">{$val['id']}</td>
+                    <td class="text-center">{$val['custname']}</td>
+                    <td class="text-center">{$val['mobile']}</td>
+                    <td class="text-center">{$val['province']}</td>
+                    <td class="text-center">{$val['city']}</td>
+                    <td class="text-center">{$val['inserttime']|date='Y-m-d',###}</td>
+                    <td class="operates">
+                    </td>
+                </tr>
+            </foreach>
+        </table>
+        {$page}
+    </div>
+</div>

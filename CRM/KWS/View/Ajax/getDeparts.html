@@ -1,0 +1,9 @@
+<select name="ParentId" id="ParentId" class="w-percent-100">
+    <option value="0">请选择</option>
+    <foreach item="department" name="parents">
+        <option value="{$department['departid']}" <if condition="$department[departid] eq $data[parentid]">selected="selected"</if>>
+        {:str_repeat('&nbsp;', (get_deep($department["dpath"])-2) * 10)}
+        {$department['departname']}
+        </option>
+    </foreach>
+</select>

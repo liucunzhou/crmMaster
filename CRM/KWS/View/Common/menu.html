@@ -1,0 +1,19 @@
+<div class="page-left menuSide">
+    <!--<a href="javascript:void(0)" class="side glyphicon glyphicon-fast-backward"></a>-->
+    <div class="menus">
+        <foreach item="v" name="asideMenu">
+            <dl>
+                <dt>
+                    <i class="glyphicon glyphicon-folder-open"></i>
+                    <span>{$key}</span>
+                </dt>
+                <foreach item="val" name="v">
+                    <dd <if condition="strtolower(CONTROLLER_NAME.'/'.ACTION_NAME) eq strtolower($val['url']) or $_GET['type'] eq ACTION_NAME">class="active"</if>>
+                        <i class="{$val['icon']}"></i>
+                        <a href="{:U($val['url'])}">{$val['text']}</a>
+                    </dd>
+                </foreach>
+            </dl>
+        </foreach>
+    </div>
+</div>

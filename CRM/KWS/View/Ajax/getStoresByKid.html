@@ -1,0 +1,27 @@
+<!--
+<label class="label-checkbox">
+    <input type="checkbox" class="checkAll">全选
+</label>
+-->
+<foreach item="val" name="store">
+    <div class="business pull-left">
+        <h5>
+            <switch name="key">
+                <case value="photo">婚纱摄影<input type="checkbox" class="checkAll">全选</case>
+                <case value="wedding">婚纱礼服<input type="checkbox" class="checkAll">全选</case>
+                <case value="hall">婚礼堂<input type="checkbox" class="checkAll">全选</case>
+                <case value="dress">男士西装<input type="checkbox" class="checkAll">全选</case>
+                <case value="baby">宝宝摄影<input type="checkbox" class="checkAll">全选</case>
+                <case value="birth">月子中心<input type="checkbox" class="checkAll">全选</case>
+            </switch>
+        </h5>
+        <div class="store-list">
+            <foreach item="v" name="val">
+                <label class="label-checkbox">
+                    <input type="checkbox" name="store[]" value="{$v['storeid']}" <if condition="in_array($v['storeid'],$_GET['store'])">checked</if>>
+                    {$brands[$v['brandid']]['brandname']} {$v['storename']}
+                </label>
+            </foreach>
+        </div>
+    </div>
+</foreach>
